@@ -45,3 +45,19 @@ HTTP 요청 메시지, HTTP 응답 메시지를 편리하게 사용하도록 도
 - HTTP API에서 주로 사용 JSON, XML, TEXT
 - 데이터 형식은 주로 JSON 사용
   - POST, PUT, PATCH
+
+# HTTP 요청 데이터 - GET 쿼리 파라미터
+- 전달 데이터
+  - username=hello
+  - age=20
+- 메시지 바디 없이, URL의 쿼리 파라미터를 사용해서 데이터를 전달하자
+- 예) 검색, 필터, 페이징 등에서 많이 쓰이는 방식
+- 쿼리파라미터는 URL에 다음과 같이 '?'를 시작으로 보낼 수 있다. 추가 파라미터는 '&'로 구분하면 된다.
+- http://localhost:8080/request-param?username=hello&age=20
+- 서버에서는 'HttpServletRequest'가 제공하는 메서드를 통해 쿼리 파라미터를 편리하게 조회할 수 있다.
+
+### 복수 파라미터에서 단일 파라미터 조회
+- username=hello&username=kim 과 같이 파라미터 이름은 하나인데 값이 중복될 때,
+- 'request.getParameter()'는 하나의 파라미터 이름에 대해서 단 하나의 값만 있을 때 사용해야 한다.
+- 중복일 때는 'request.getParameterValues()'를 사용해야 한다.
+- 참고로 이렇게 중복일 때, 'request.getParameter()'를 사용하면 'request.getParameterValues()'의 첫번째 값을 반환한다.
