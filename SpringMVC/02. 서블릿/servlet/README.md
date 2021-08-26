@@ -83,3 +83,12 @@ HTTP 요청 메시지, HTTP 응답 메시지를 편리하게 사용하도록 도
 - 'POST HTML Form 형식'으로 데이터를 전달하면 HTTP 메시지 바디에 해당 데이터를 포함해서 보내기 때문에 바디에 포함된 데이터가 어떤 형식인지 content-type을 꼭 지정해야 한다.
 - 이렇게 폼으로 데이터를 전송하는 형식을 'application/x-www-form-urlencoded'라 한다.
 
+## HTTP 요청 데이터 - API 메시 바디 - 단순 텍스트
+- HTTP message body에 데이터를 직접 담아서 요청
+  - HTTP API 에서 주로 사용, JSON, XML, TEXT
+  - 데이터 형식은 주로 JSON 사용
+  - POST, PUT, PATCH
+- HTTP 메시지 바디의 데이터를 InputStream을 사용해서 직접 읽을 수 있다.
+
+## 참고
+- inputStream은 byte 코드를 우리가 읽을 수 잇는 문자(String)로 보려면 문자표(Charset)를 지정해주어야 한다.
