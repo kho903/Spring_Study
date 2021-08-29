@@ -105,3 +105,13 @@ HTTP 요청 메시지, HTTP 응답 메시지를 편리하게 사용하도록 도
 스프링 부트로 Spring MVC를 선택하면 기본으로 Jackson 라이브러리 ('ObjectMapper')를 함께 제공한다.
 - HTML form 데이터도 메시지 바디를 통해 전송되므로 직접 읽을 수 있다. 하지만 편리한 파라미터 조회 기능
   ('request.getParameter(...)')을 이미 제동하기 때문에 파라미터 조회 기능을 사용하면 된다.
+
+# HTTPServletResponse - 기본 사용법
+## HTTPServletResponse의 역할
+- HTTP 응답 메시지 생성
+  - HTTP 응답코드 지정
+  - 헤더 생성
+  - 바디 생성
+- 편의 기능 제공
+  - Content-Type, 쿠키, Redirect
+
