@@ -115,3 +115,9 @@ HTTP 요청 메시지, HTTP 응답 메시지를 편리하게 사용하도록 도
 - 편의 기능 제공
   - Content-Type, 쿠키, Redirect
 
+# Http 응답 데이터 - 단순 텍스트, HTML
+## HTTP 응답 메시지는 주로 다음 내용을 담아서 전달한다.
+- 단순 텍스트 응답
+  - 앞에서 살펴봄 ('writer.println("ok");')
+- HTML 응답
+- HTTP API - MessageBody JSON 응답
