@@ -130,3 +130,13 @@ HTTP 요청 메시지, HTTP 응답 메시지를 편리하게 사용하도록 도
 - 'application/json'은 스펙상 utf-8 형식을 사용하도록 정의되어 있다. 그래서 스펙에서 charset=utf-8과 같은 추가 파라미터를 지원하지 않는다.
 따라서 'application/json'이라고만 사용해야지 'application/json;charset=utf-8'이라고 전달하는 것은 의미 없는 파라미터를 추가한 것이 된다.
 response.getWriter()를 사용하면 추가 파라미터를 자동으로 추가해버린다. 이때는 response.getOutputStream()으로 출력하면 그런 문제가 없다.
+
+# 회원 관리 웹 애플리케이션 요구 사항
+## 회원 정보
+- 이름 : 'username'
+- 나이 : 'age'
+
+## 기능 요구사항
+- 회원 저장
+- 회원 목록 조회
+
