@@ -175,3 +175,20 @@ JSP를 제외한 나머지 뷰 템플릿들은 `forward()`과정 없이 바로 �
 
 > `RequestMappingHandlerMapping`은 스프링 빈 중에서 `@RequestMapping` 또는 
 > `@Controller`가 클래스 레벨에 붙어 있는 경우에 매핑 정보로 인식한다.
+
+## 스프링 MVC - 컨트롤러 통합
+- `@RequestMapping`을 잘 보면 클래스 단위가 아니라 메서드 단위에 적용된 것을 확인할 수 있다.
+- 따라서 컨트롤러 클래스를 유연하게 하나로 통합할 수 있다.
+
+### 조합
+- 컨트롤러 클래스를 통합하는 것을 넘어서 조합도 가능하다.
+- 예) /springmvc/v2/members 중복
+    - @RequestMapping("/springmvc/v2/members/new-form")
+    - @RequestMapping("/springmvc/v2/members")
+    - @RequestMapping("/springmvc/v2/members/save")
+- 조합결과
+    - 클래스 레벨에 @RequestMapping("/springmvc/v2/members")
+    - 메서드 레벨에
+        - @RequestMapping("/new-form")
+        - @RequestMapping("/save")
+        - @RequestMapping
