@@ -65,3 +65,32 @@
 - 스프링 부트가 제공하는 로그 기능
   - https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.logging
 - slf4j, Logback
+
+# 요청 매핑
+## 매핑 정보
+- @RestController
+  - @Controller는 반환값이 String이면 뷰 이름으로 인식된다. 그래서 뷰를 찾고 뷰가 렌더링된다.
+  - @RestController는 반환 값으로 뷰를 찾는 것이 아니라, HTTP 메시지 바디에 바로 입력한다.
+    따라서 실행결과로 ok메세지를 받을 수 있다. @ResponseBody와 관련있다.
+- @RequestMapping("/hello-basic")
+  - /hello-basic URL 호출이 오면 이 메서드가 실행되도록 매핑한다.
+  - 대부분의 속성을 배열[]로 제공하므로 다중 설정이 가능하다. `{"/hello-basic", "/hello-go"}`
+  
+## 둘다 허용
+- 다음 두가지 요청은 다른 url 이지만, 스프링은 다음 url 요청들을 같은 요청으로 매핑한다.
+- 매핑 : '/hello-basic'
+- url 요청 : '/hello-basic', '/hello-basic/'
+
+## HTTP 메서드
+- '@RequestMapping'에 'method' 속성으로 HTTP 메서드를 지정하지 않으면 HTTP 메서드와 무관하게 호출된다.
+- 모두 허용 : GET, HEAD, POST, PUT, PATCH, DELETE
+- HTTP 메서드 매핑을 했을 때 다른 요청이 들어오면 HTTP 405 상태코드(Method Not Allowed)를 반환한다.
+
+## PathVariable(경로 변수) 사용
+- @GetMapping("/mapping/{userId}")
+- @PathVariable("userId")
+- 최근에는 HTTP API는 다음과 같이 리소스 경로에 식별자를 넣는 스타일을 선호한다.
+  - '/mapping/userA'
+  - '/users/1'
+- @RequestMapping은 URL 경로를 템플릿화 할 수 있는데, @PathVariable을 사용하면 매칭되는 부분을 편리하게 조회할 수 있다.
+- @PathVariable의 이름과 파라미터 이름이 같으면 생략할 수 있다.
