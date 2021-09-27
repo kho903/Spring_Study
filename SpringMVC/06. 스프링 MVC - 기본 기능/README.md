@@ -94,3 +94,13 @@
   - '/users/1'
 - @RequestMapping은 URL 경로를 템플릿화 할 수 있는데, @PathVariable을 사용하면 매칭되는 부분을 편리하게 조회할 수 있다.
 - @PathVariable의 이름과 파라미터 이름이 같으면 생략할 수 있다.
+
+# 요청 매핑 - API 예시
+- 회원관리를 HTTP API로 만든다고 생각
+
+## 회원관리 API
+- 회원 목록 조회 : GET '/users'
+- 회원 등록 : POST '/users'
+- 회원 조회 : GET '/users/{userID}'
+- 회원 수정 : PATCH '/users/{userID}'
+- 회원 삭제 : DELETE '/users/{userID}'
