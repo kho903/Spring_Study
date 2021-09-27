@@ -192,3 +192,6 @@ JSP를 제외한 나머지 뷰 템플릿들은 `forward()`과정 없이 바로 �
         - @RequestMapping("/new-form")
         - @RequestMapping("/save")
         - @RequestMapping
+
+## 스프링 MVC - 실용적인 방식
+- 스프링 MVC는 개발자가 편리하게 개발할 수 있도록 수 많은 편의 기능을 제공한다.
