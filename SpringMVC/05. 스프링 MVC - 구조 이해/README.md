@@ -195,3 +195,24 @@ JSP를 제외한 나머지 뷰 템플릿들은 `forward()`과정 없이 바로 �
 
 ## 스프링 MVC - 실용적인 방식
 - 스프링 MVC는 개발자가 편리하게 개발할 수 있도록 수 많은 편의 기능을 제공한다.
+
+### Model 파라미터
+- `save()`, `members()`를 보면 Model을 파라미터로 받는 것을 확인할 수 있다.
+- 스프링 MVC도 이런 편의 기능을 제공한다.
+
+### ViewName 직접 반환
+- 뷰의 논리 이름을 반환할 수 있다.
+
+### @RequestParam 사ㅣ용
+- 스프링은 HTTP 요청 파라미터를 `@RequestParam`으로 받을 수 있다.
+- `@RequestParam("username")`은 `request.getParameter("username")`와 거의 같은 코드라 생각하면 된다.
+- 물론 GET 쿼리 파라미터, POST Form 방식을 모두 지원한다.
+
+### @RequestMapping -> @GetMapping, @PostMapping
+- `@RequestMapping`은 URL만 매칭하는 것이 아니라, HTTP Method도 함께 구분할 수 있다.
+- 예를 들어 URLdl '/new-form'이고, HTTP Method가 GET인 경우를 모두 만족하는 매핑을 하려 다음과 같이 처리
+```java
+@RequestMapping(value="/new-form", method=RequestMethod.GET)
+```
+- 이것을 `@GetMapping`, `@PostMapping`으로 더 편리하게 사용할 수 있다.
+- 참고로 Get, Post, Put, Delete, Patch 모두 애노테이션이 준비되어 있다.
