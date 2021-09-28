@@ -293,3 +293,27 @@ class HelloData {
 ### @ResponseBody
 - @ResponseBody를 사용하면 응답 결과를 HTTP 메시지 바디에 직접 담아서 전달할 수 있다.
 - 이 경우에도 view를 사용하지 않는다.
+
+# HTTP 요청 메시지 - JSON
+## @RequestBody 객체 파라미터
+- @RequestBody HelloData data
+- @RequestBody에 직접 만든 객체를 지정할 수 있다.
+- `HttpEntity`, `@RequestBody`를 사용하면 HTTP 메시지 컨버터가 HTTP 메시지 바디의 내용을 우리가 원하는 문자나 객체 등으로 변환해준다.
+- HTTP 메시지 컨버터는 문자 뿐만 아니라 JSON도 객체로 변환해주는데, 우리가 방금 V2에서 했던 작업을 대신 처리해준다.
+
+### @RequestBody는 생략 불가능
+- 스프링은 `@ModelAttribute`, `@RequestParam` 해당 생략시 다음과 같은 규칙을 적용한다.
+- `String`, `int`, `Integer` 같은 단순 타입 - `@RequestParam`
+- 나머지 = `@ModelAttribute` (argument resolver로 지정해둔 타입 외)
+
+### 주의
+- HTTP 요청 시에 content-type이 application/json 인지 꼭 확인해야 한다. 그래야 JSON을 처리할 수 있는 HTTP 메시지 컨버터가 실행된다.
+
+### @ResponseBody
+- 응답의 경우에도 @ResponseBody를 사용하면 해당 객체를 HTTP 메시지 바디에 직접 넣어줄 수 있다.
+- 이 경우에도 'HttpEntity'를 사용해도 된다.
+
+### @RequestBody 요청
+- JSON 요청 -> HTTP 메시지 컨버터 -> 객체
+### @RequestBody 응답
+- 객채 -> HTTP 메시지 컨버터 -> JSON 응답
