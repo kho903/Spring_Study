@@ -101,3 +101,14 @@ HTML 뷰 템플릿을 직접 만지는 대신에, HTTP API를 통해 웹 클라�
 확인할 수 있다. JSP를 생각해보면, JSP 파일은 웹 브라우저에서 그냥 열면 JSP 소스코드와 HMTL이 뒤죽박죽 되어서 정상적인 확인이 불가능하다.
 오직 서버를 통해서 JSP를 열어야 한다.
 - 이렇게 순수 HTML을 그대로 유지하면서 뷰 템플릿도 사용할 수 있는 타임리프의 특징을 네츄럴 템플릿(natural template) 이라 한다.
+
+## 속성 변경 - th:value
+`th:value="${item.id}"`
+- 모델에 있는 item 정보를 획득하고 프로퍼티 접근법으로 출력한다. (item.getId())
+- value 속성은 th:value 속성으로 변경한다.
+
+## 상품 수정 링크
+- `th:onclick="|location.href='@{/basic/items/{itemId}/edit(itemId=${item.id)}'|"`
+
+## 목록으로 링크
+- `th:onclick="|location.href='@{/basic/items}'|"`
