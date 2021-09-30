@@ -112,3 +112,15 @@ HTML 뷰 템플릿을 직접 만지는 대신에, HTTP API를 통해 웹 클라�
 
 ## 목록으로 링크
 - `th:onclick="|location.href='@{/basic/items}'|"`
+
+## 속성 변경 - th:action
+- `th:action`
+- HTML form에서 `action`에 값이 없으면 현재 URL에 데이터를 전송한다.
+- 상품 등록 폼의 URL과 실제 상품 등록을 처리하는 URL을 똑같이 맞추고 HTTP 메서드로 두 기능을 구분한다.
+  - 상품 등록 폼 : GET `/basic/items/add`
+  - 상품 등록 처리 : POST `/basic/items/add`
+- 이렇게 하면 하나의 URL로 등록 폼과 등록 처리를 깔끔하게 처리할 수 있다.
+
+## 취소
+- 취소 시 상품 목록으로 이동한다.
+- `th:onclick="|location.href='@{/basic/items}'|"`
