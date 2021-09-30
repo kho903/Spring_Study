@@ -124,3 +124,22 @@ HTML 뷰 템플릿을 직접 만지는 대신에, HTTP API를 통해 웹 클라�
 ## 취소
 - 취소 시 상품 목록으로 이동한다.
 - `th:onclick="|location.href='@{/basic/items}'|"`
+
+# 상품 등록 처리 - @ModelAttribute
+## POST - HTML Form
+- `content-type: application/x-www-form-urlencoded`
+- 메시지 바디에 쿼리 파라미터 형식으로 전달 `itemName=itemA&price=10000&quantity=10`
+  - 요청 파라미터 형식을 처리해야 하므로 `@RequestParam` 사용
+- 예) 회원 가입, 상품 주문, HTML Form 사용
+
+## @RequestParam
+- `@RequestParma String itemName` : itemName 요청 파라미터 데이터를 해당 변수에 받는다.
+- `Item` 객체를 생성하고 `itemRepository`를 통해서 저장한다.
+- 저장된 `item`을 모델에 담아서 뷰에 전달한다.
+
+## @ModelAttribute
+- `@RequestParam`으로 변수를 하나하나 받아서 `Item`을 생성하는 과정은 불편하다.
+- @ModelAttribute - 요청 파라미터 처리
+  - `@ModelAttribute`는 `Item` 객체를 생성하고, 요청 파라미터의 값을 프로퍼티 접근법(setXxx)으로 입력해준다.
+- @ModelAttribute - Model 추가
+  - 모델(Model)에 `@ModelAttribute`로 지정한 객체를 자동으로 넣어준다.
