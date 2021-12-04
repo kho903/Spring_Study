@@ -13,3 +13,11 @@
   - 기본값 : 클래스 이름을 그대로 사용 (예 : Member)
   - 같은 클래스 이름이 없으면 가급적 기본값을 사용한다.
 
+## @Table
+- @Table은 엔티티와 매핑할 테이블 지정
+### @Table 속성 / 기능
+- name : 매핑할 테이블이름
+  - 기본값 : 엔티티 이름을 사용
+- catalog : 데이터베이스 catalog 매핑
+- schema : 데이터베이스 schema 매핑
+- uniqueConstraints : DDL 생성 시에 유니크 제약 조건 생성
