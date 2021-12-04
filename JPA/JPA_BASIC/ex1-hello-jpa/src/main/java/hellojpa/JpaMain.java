@@ -71,10 +71,17 @@ public class JpaMain {
 
 
             // 엔티티 수정 - 변경 감지
-            Member member = em.find(Member.class, 150L);
+            /*Member member = em.find(Member.class, 150L);
             member.setName("ZZZZZ");
 
-//            em.persist(member);
+//            em.persist(member);*/
+
+            // 플러시
+            Member member = new Member(200L, "member200");
+            em.persist(member);
+
+            em.flush(); // INSERT Query가 즉시 호출
+            System.out.println("=============");
 
             tx.commit(); // DB에 저장되는 때!, [트랜잭션] 커밋!
         } catch (Exception e) {
