@@ -77,11 +77,19 @@ public class JpaMain {
 //            em.persist(member);*/
 
             // 플러시
-            Member member = new Member(200L, "member200");
+            /*Member member = new Member(200L, "member200");
             em.persist(member);
 
             em.flush(); // INSERT Query가 즉시 호출
-            System.out.println("=============");
+            System.out.println("=============");*/
+
+            // 준영속
+            Member member = em.find(Member.class, 150L);
+            member.setName("AAAAA");
+//            em.detach(member); // 특정 엔티티만 준영속 상태로 전환
+            em.clear(); // 영속성 컨텍스트를 완전히 초기화
+
+            Member member2 = em.find(Member.class, 150L);
 
             tx.commit(); // DB에 저장되는 때!, [트랜잭션] 커밋!
         } catch (Exception e) {
