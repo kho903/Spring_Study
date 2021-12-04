@@ -44,7 +44,7 @@ hibernate.hbm2ddl.auto
 - @Lob : BLOB, CLOB 매핑
 - @Transient : 특정 필드를 컬럼에 매핑하지 않음 (매핑 무시)
 
-### @Colum
+### @Column
 - name : 필드와 매핑할 테이블의 컬럼 이름
     - 기본값 : 객체의 필드 이름
 - insertable, updatable : 등록, 병경 가능 여부
