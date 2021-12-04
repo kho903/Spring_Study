@@ -9,7 +9,10 @@ public class Member {
 
     @Id
     private Long id;
+
+    @Column(unique = true, length = 10)
     private String name;
+    private int age;
 
     public Member() {
     }
