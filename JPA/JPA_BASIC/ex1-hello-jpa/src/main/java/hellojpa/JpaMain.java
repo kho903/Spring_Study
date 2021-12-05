@@ -23,7 +23,6 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("member1");
-//            member.setTeamId(team.getId());
             member.setTeam(team);
             em.persist(member);
 
@@ -31,11 +30,11 @@ public class JpaMain {
             em.clear();
 
             Member findMember = em.find(Member.class, member.getId());
+            List<Member> members = findMember.getTeam().getMembers();
 
-//            Long findTeamId = findMember.getTeamId();
-//            Team findTeam = em.find(Team.class, findTeamId);
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam.getName() = " + findTeam.getName());
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());
+            }
 
             tx.commit(); // DB에 저장되는 때!, [트랜잭션] 커밋!
         } catch (Exception e) {
