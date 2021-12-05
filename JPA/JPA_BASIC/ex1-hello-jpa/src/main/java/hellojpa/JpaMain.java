@@ -92,12 +92,38 @@ public class JpaMain {
             Member member2 = em.find(Member.class, 150L);
 */
 
-            Member member = new Member();
+            /*Member member = new Member();
             member.setId(3L);
             member.setUsername("C");
             member.setRoleType(RoleType.GUEST);
 
+            em.persist(member);*/
+
+            /*Member member = new Member();
+//            member.setId("ID_A");
+            member.setUsername("C");
+
+            System.out.println("================");
             em.persist(member);
+            System.out.println("member.getId() = " + member.getId());
+            System.out.println("================");*/
+
+            Member member1 = new Member();
+            member1.setUsername("A");
+            Member member2 = new Member();
+            member2.setUsername("B");
+            Member member3 = new Member();
+            member3.setUsername("C");
+
+            System.out.println("============");
+            em.persist(member1);
+            em.persist(member1);
+            em.persist(member1);
+
+            System.out.println("member1.getId() = " + member1.getId());
+            System.out.println("member2.getId() = " + member2.getId());
+            System.out.println("member3.getId() = " + member3.getId());
+            System.out.println("============");
 
             tx.commit(); // DB에 저장되는 때!, [트랜잭션] 커밋!
         } catch (Exception e) {
