@@ -80,3 +80,50 @@ JOIN MEMEBER M ON T.TEAM_ID = M.TEAM_ID
 ### 누구를 주인으로?
 - 외래 키가 있는 곳을 주인으로 정한다.
 - 여기서는 Member.team이 연관관계의 주인
+
+## 양방향 매핑시 가장 많이 하는 실수
+### (연관관계의 주인에 값을 입력하지 않음)
+```java
+Team team = new Team();
+team.setName("TeamA");
+em.persist(team);
+
+Member member = new Member();
+member.setName("member1");
+
+// 역방향 (주인이 아닌 방향)만 연관관계 설정
+team.getMembers().add(member);
+
+em.persist(member);
+```
+- member1의 team_id 가 null이 됨
+
+## 양방향 매핑 시 연관관계의 주인에 값을 입력해야 한다.
+### (순수한 객체 관계를 고려하면 항상 양쪽 다 값을 입력해야 한다.)
+```java
+Team team = new Team();
+team.setName("TeamA");
+em.persist(team);
+Member member = new Member();
+member.setName("member1");
+team.getMembers().add(member);
+//연관관계의 주인에 값 설정
+member.setTeam(team); //**
+em.persist(member);
+```
+
+## 양방향 연관관계 주의 - 실습
+- 순수 객체 상태를 고려해서 항상 양쪽에 값을 설정하자.
+- 연관관계 편의 메소드를 생성하자.
+- 양방향 매핑 시에 무한루프를 조심하자.
+    - 예: toString(), lombok, JSON 생성 라이브러리
+
+## 양방향 매핑 정리
+- 단방향 매핑만으로도 이미 연관관계 매핑은 완료
+- 양방향 매핑은 반대 방향으로 조회 (객체 그래프 탐색) 기능이 추가된 것 뿐
+- JPQL에서 역방행으로 탐색할 일이 많음
+- 단방향 매핑을 잘 하고 양방향은 필요할 때 추가해도 됨 (테이블에 영향을 주지 않음)
+
+## 연관관계의 주인을 정하는 기준
+- 비즈니스 로직을 기준으로 연관관계의 주인을 선택하면 안됨
+- 연관관계의 주인은 외래 키의 위치를 기준으로 정해야 함
