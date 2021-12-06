@@ -16,15 +16,20 @@ public class JpaMain {
 
         // code
         try {
-            Member member = new Member();
-            member.setUsername("member1");
-            em.persist(member);
 
-            Team team = new Team();
-            team.setName("teamA");
-            team.getMembers().add(member);
+            Movie movie = new Movie();
+            movie.setDirector("a");
+            movie.setActor("bbb");
+            movie.setName("바람과 함께 사라지다.");
+            movie.setPrice(10000);
 
-            em.persist(team);
+            em.persist(movie);
+
+            em.flush();
+            em.clear();
+
+            Movie findMovie = em.find(Movie.class, movie.getId());
+            System.out.println("findMovie = " + findMovie);
 
             tx.commit(); // DB에 저장되는 때!, [트랜잭션] 커밋!
         } catch (Exception e) {
