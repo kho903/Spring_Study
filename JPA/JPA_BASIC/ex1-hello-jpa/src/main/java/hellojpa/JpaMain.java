@@ -16,21 +16,15 @@ public class JpaMain {
 
         // code
         try {
-
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
-
             Member member = new Member();
             member.setUsername("member1");
             em.persist(member);
 
-            em.flush();
-            em.clear();
+            Team team = new Team();
+            team.setName("teamA");
+            team.getMembers().add(member);
 
-            Team findTeam = em.find(Team.class, team.getId()); // 1차 캐시
-            System.out.println("======================");
-            System.out.println("======================");
+            em.persist(team);
 
             tx.commit(); // DB에 저장되는 때!, [트랜잭션] 커밋!
         } catch (Exception e) {
