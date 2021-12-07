@@ -23,8 +23,8 @@ public class JpaMain {
             member.getFavoriteFoods().add("피자");
             member.getFavoriteFoods().add("족발");
 
-            member.getAddressHistory().add(new Address("old1", "street", "10000"));
-            member.getAddressHistory().add(new Address("old2", "street", "10000"));
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
 
             em.persist(member);
 
@@ -56,8 +56,8 @@ public class JpaMain {
 //            findMember.getFavoriteFoods().add("한식");
 
             // remove 후 add (equals method로 같은 Address를 new 하여 그것과 같은 address를 지워주는 방식)
-            findMember.getAddressHistory().remove(new Address("old1", "street", "10000"));
-            findMember.getAddressHistory().add(new Address("newCity1", "street", "10000"));
+//            findMember.getAddressHistory().remove(new Address("old1", "street", "10000"));
+//            findMember.getAddressHistory().add(new Address("newCity1", "street", "10000"));
 
             tx.commit(); // DB에 저장되는 때!, [트랜잭션] 커밋!
         } catch (Exception e) {
