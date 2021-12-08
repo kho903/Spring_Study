@@ -95,7 +95,7 @@ public class FetchJoinMain {
             }*/
 
             // @BatchSize(size = 100) 추가 후
-            String query = "select t from Team t";
+            /*String query = "select t from Team t";
             List<Team> result = em.createQuery(query, Team.class)
                     .setFirstResult(0)
                     .setMaxResults(2)
@@ -105,6 +105,25 @@ public class FetchJoinMain {
                 for (Member member : team.getMembers()) {
                     System.out.println(" ==> member = " + member);
                 }
+            }*/
+
+//            String query = "select m from Member m where m = :member";
+//            Member findMember = em.createQuery(query, Member.class)
+//                    .setParameter("member", member1)
+//                    .getSingleResult();
+            /*String query = "select m from Member m where m.id = :memberId";
+            Member findMember = em.createQuery(query, Member.class)
+                    .setParameter("memberId", member1.getId())
+                    .getSingleResult();
+            System.out.println("findMember = " + findMember);*/
+
+            String query = "select m from Member m where m.team = :team";
+            List<Member> members = em.createQuery(query, Member.class)
+                    .setParameter("team", teamA)
+                    .getResultList();
+
+            for (Member member : members) {
+                System.out.println("member = " + member);
             }
 
             tx.commit();
