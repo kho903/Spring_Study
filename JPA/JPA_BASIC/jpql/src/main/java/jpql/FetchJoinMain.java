@@ -73,7 +73,7 @@ public class FetchJoinMain {
             }*/
 
             // 페치 조인 and DISTINCT
-            String query = "select distinct t from Team t join fetch t.members";
+            /*String query = "select distinct t from Team t join fetch t.members m";
             List<Team> result = em.createQuery(query, Team.class)
                     .getResultList();
             for (Team team : result) {
@@ -81,7 +81,7 @@ public class FetchJoinMain {
                 for (Member member : team.getMembers()) {
                     System.out.println(" ==> member = " + member);
                 }
-            }
+            }*/
 
             // 그냥 조인 - 쿼리가 출력을 찍을 때 마다 나옴
             /*String query = "select t from Team t join t.members m";
@@ -93,6 +93,19 @@ public class FetchJoinMain {
                     System.out.println(" ==> member = " + member);
                 }
             }*/
+
+            // @BatchSize(size = 100) 추가 후
+            String query = "select t from Team t";
+            List<Team> result = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
+                    .getResultList();
+            for (Team team : result) {
+                System.out.println("team = " + team.getName() + " | members = "+ team.getMembers().size());
+                for (Member member : team.getMembers()) {
+                    System.out.println(" ==> member = " + member);
+                }
+            }
 
             tx.commit();
         } catch (Exception e) {
