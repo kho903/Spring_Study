@@ -154,4 +154,35 @@ class MemberRepositoryTest {
             System.out.println("member = " + member);
         }
     }
+
+
+    @Test
+    public void returnTypeTest() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> aaa = memberRepository.findListByUsername("AAA");
+        Member findMember = memberRepository.findMemberByUsername("AAA");
+        System.out.println("findMember = " + findMember);
+
+        Optional<Member> aaaOptional = memberRepository.findOptionalByUsername("AAA");
+        System.out.println("aaaOptional = " + aaaOptional.get());
+
+        List<Member> result = memberRepository.findListByUsername("Aasdfas");
+        System.out.println("result.size() = " + result.size()); // 0
+
+        Member findMember_null = memberRepository.findMemberByUsername("asdadasd");
+        System.out.println("findMember_null = " + findMember_null); // null
+
+        // 자바 8 이후
+        Optional<Member> nullOptional = memberRepository.findOptionalByUsername("asdfsdf");
+        System.out.println("nullOptional = " + nullOptional); // Optional.empty
+
+        // username이 AAA인 member가 여러 개 일때 exceptionOptonal
+        Optional<Member> exceptionOptional = memberRepository.findOptionalByUsername("AAA");
+        System.out.println("exceptionOptional = " + exceptionOptional); // Optional.empty
+
+    }
 }
