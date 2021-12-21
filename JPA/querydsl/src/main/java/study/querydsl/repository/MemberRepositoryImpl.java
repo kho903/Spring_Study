@@ -87,7 +87,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
 
 //        return new PageImpl<>(content, pageable, total);
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
     @Override
