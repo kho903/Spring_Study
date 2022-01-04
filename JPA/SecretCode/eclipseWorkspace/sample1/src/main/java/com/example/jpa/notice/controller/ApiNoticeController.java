@@ -68,4 +68,9 @@ public class ApiNoticeController {
         return noticeList;
     }
 
+    @GetMapping("/api/notice4")
+    public List<NoticeModel> noticeModelListNull() {
+        List<NoticeModel> noticeModels = new ArrayList<>();
+        return noticeModels;
+    }
 }
