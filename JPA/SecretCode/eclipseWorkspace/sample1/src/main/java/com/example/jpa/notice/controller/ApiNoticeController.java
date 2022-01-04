@@ -99,4 +99,12 @@ public class ApiNoticeController {
                 .build();
         return notice;
     }
+
+    @PostMapping("/api/notice2")
+    public NoticeModel addNotice2(NoticeModel noticeModel) {
+        noticeModel.setId(2);
+        noticeModel.setRegDate(LocalDateTime.now());
+
+        return noticeModel;
+    }
 }
