@@ -1,5 +1,6 @@
 package com.example.jpa;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,5 +11,10 @@ public class SecondController {
 	@RequestMapping(value = "/hello-spring", method = RequestMethod.GET)
 	public String helloSpring() {
 		return "hello spring";
+	}
+	
+	@GetMapping("/hello-rest")
+	public String helloRest() {
+		return "hello rest";
 	}
 }
