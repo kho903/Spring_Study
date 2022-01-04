@@ -2,6 +2,8 @@ package com.example.jpa.notice.controller;
 
 import com.example.jpa.notice.model.NoticeModel;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -80,4 +82,21 @@ public class ApiNoticeController {
         return 10;
     }
 
+    @PostMapping("/api/notice")
+    public NoticeModel addNotice(@RequestParam String title, @RequestParam String contents) {
+        /*NoticeModel notice = new NoticeModel();
+        notice.setTitle(title);
+        notice.setContents(contents);
+        notice.setId(1);
+        notice.setRegDate(LocalDateTime.now());*/
+
+        // builder 페턴
+        NoticeModel notice = NoticeModel.builder()
+                .id(1)
+                .title(title)
+                .contents(contents)
+                .regDate(LocalDateTime.now())
+                .build();
+        return notice;
+    }
 }
