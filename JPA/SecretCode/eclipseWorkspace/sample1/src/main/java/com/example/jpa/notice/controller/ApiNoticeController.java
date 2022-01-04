@@ -73,4 +73,11 @@ public class ApiNoticeController {
         List<NoticeModel> noticeModels = new ArrayList<>();
         return noticeModels;
     }
+
+    @GetMapping("/api/notice/count")
+    public int noticeCount() {
+        // int도 가능
+        return 10;
+    }
+
 }
