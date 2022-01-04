@@ -1,4 +1,4 @@
-package com.example.jpa;
+package com.example.jpa.hello;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
