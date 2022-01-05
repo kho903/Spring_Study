@@ -8,6 +8,7 @@ import com.example.jpa.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -215,6 +216,14 @@ public class ApiNoticeController {
 
         notice.setHits(notice.getHits() + 1);
         noticeRepository.save(notice);
+    }
+
+    @DeleteMapping("/api/notice/{id}")
+    public void deleteNotice(@PathVariable Long id) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new NoticeNotFoundException("공지사항에 글이 존재하지 않습니다."));
+
+        noticeRepository.delete(notice);
     }
 }
 
