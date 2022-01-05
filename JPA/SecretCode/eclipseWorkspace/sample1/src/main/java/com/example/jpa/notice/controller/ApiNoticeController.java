@@ -135,6 +135,21 @@ public class ApiNoticeController {
 
         return notice;
     }
+
+    @PostMapping("/api/notice5")
+    public Notice addNotice5(@RequestBody NoticeInput noticeInput) {
+        Notice notice = Notice.builder()
+                .title(noticeInput.getTitle())
+                .contents(noticeInput.getContents())
+                .regDate(LocalDateTime.now())
+                .hits(0)
+                .likes(0)
+                .build();
+
+        noticeRepository.save(notice);
+
+        return notice;
+    }
 }
 
 
