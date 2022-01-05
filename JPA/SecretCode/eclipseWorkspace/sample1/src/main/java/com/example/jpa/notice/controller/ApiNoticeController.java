@@ -218,6 +218,16 @@ public class ApiNoticeController {
         noticeRepository.save(notice);
     }
 
+    // 21번
+    /*@DeleteMapping("/api/notice/{id}")
+    public void deleteNotice(@PathVariable Long id) {
+        Optional<Notice> notice = noticeRepository.findById(id);
+        if (notice.isPresent()) {
+            noticeRepository.delete(notice.get());
+        }
+    }*/
+
+    // 22번
     @DeleteMapping("/api/notice/{id}")
     public void deleteNotice(@PathVariable Long id) {
         Notice notice = noticeRepository.findById(id)
