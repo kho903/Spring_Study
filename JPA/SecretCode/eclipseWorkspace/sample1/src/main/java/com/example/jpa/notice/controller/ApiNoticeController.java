@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -205,6 +206,15 @@ public class ApiNoticeController {
         notice.setUpdateDate(LocalDateTime.now());
         noticeRepository.save(notice);
 
+    }
+
+    @PatchMapping("/api/notice/{id}/hits")
+    public void noticeHits(@PathVariable Long id) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new NoticeNotFoundException("공지사항에 글이 존재하지 않습니다."));
+
+        notice.setHits(notice.getHits() + 1);
+        noticeRepository.save(notice);
     }
 }
 
