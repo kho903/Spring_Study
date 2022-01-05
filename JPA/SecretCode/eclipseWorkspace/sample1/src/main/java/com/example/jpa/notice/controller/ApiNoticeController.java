@@ -271,6 +271,11 @@ public class ApiNoticeController {
 
         noticeRepository.saveAll(noticeList);
     }
+
+    @DeleteMapping("/api/notice/all")
+    public void deleteAll() {
+        noticeRepository.deleteAll();
+    }
 }
 
 
