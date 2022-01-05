@@ -1,6 +1,10 @@
 package com.example.jpa.notice.controller;
 
+import com.example.jpa.notice.entity.Notice;
+import com.example.jpa.notice.model.NoticeInput;
 import com.example.jpa.notice.model.NoticeModel;
+import com.example.jpa.notice.repository.NoticeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class ApiNoticeController {
+
+    private final NoticeRepository noticeRepository;
 
     @GetMapping("/api/notice")
     public String noticeString() {
@@ -115,4 +122,23 @@ public class ApiNoticeController {
         noticeModel.setRegDate(LocalDateTime.now());
         return noticeModel;
     }
+
+    @PostMapping("/api/notice4")
+    public Notice addNotice4(@RequestBody NoticeInput noticeInput) {
+        Notice notice = Notice.builder()
+                .title(noticeInput.getTitle())
+                .contents(noticeInput.getContents())
+                .regDate(LocalDateTime.now())
+                .build();
+
+        noticeRepository.save(notice);
+
+        return notice;
+    }
 }
+
+
+
+
+
+
