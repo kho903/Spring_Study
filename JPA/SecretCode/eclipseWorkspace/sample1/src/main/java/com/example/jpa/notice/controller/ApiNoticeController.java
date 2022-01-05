@@ -6,6 +6,7 @@ import com.example.jpa.notice.model.NoticeModel;
 import com.example.jpa.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -149,6 +151,15 @@ public class ApiNoticeController {
         noticeRepository.save(notice);
 
         return notice;
+    }
+
+    @GetMapping("/api/notice/{id}")
+    public Notice notice(@PathVariable Long id) {
+        Optional<Notice> notice = noticeRepository.findById(id);
+        if (notice.isPresent()) {
+            return notice.get();
+        }
+        return null;
     }
 }
 
