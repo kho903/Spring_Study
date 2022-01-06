@@ -333,6 +333,32 @@ public class ApiNoticeController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/api/notice8")
+    public ResponseEntity<Object> addNotice8(@RequestBody @Valid NoticeInput noticeInput, Errors errors) {
+
+        if (errors.hasErrors()) {
+            List<ResponseError> responseErrors = new ArrayList<>();
+
+            errors.getAllErrors().stream().forEach(e -> {
+                responseErrors.add(ResponseError.of( (FieldError) e));
+            });
+
+
+            return new ResponseEntity<>(responseErrors, HttpStatus.BAD_REQUEST);
+        }
+
+        // 정상적인 저장..
+        noticeRepository.save(Notice.builder()
+                .title(noticeInput.getTitle())
+                .contents(noticeInput.getContents())
+                .hits(0)
+                .likes(0)
+                .regDate(LocalDateTime.now())
+                .build());
+
+        return ResponseEntity.ok().build();
+    }
 }
 
 
