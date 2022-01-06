@@ -6,10 +6,13 @@ import com.example.jpa.notice.exception.NoticeNotFoundException;
 import com.example.jpa.notice.model.NoticeDeleteInput;
 import com.example.jpa.notice.model.NoticeInput;
 import com.example.jpa.notice.model.NoticeModel;
+import com.example.jpa.notice.model.ResponseError;
 import com.example.jpa.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -287,6 +291,47 @@ public class ApiNoticeController {
                 .regDate(LocalDateTime.now())
                 .build();
         noticeRepository.save(notice);
+    }
+
+    @PostMapping("/api/notice7")
+    public ResponseEntity<Object> addNotice7(@RequestBody @Valid NoticeInput noticeInput, Errors errors) {
+        /*if (noticeInput.getTitle() == null
+            || noticeInput.getTitle().length() < 1
+            || noticeInput.getContents() == null
+            || noticeInput.getContents().length() < 1)  {
+
+            return new ResponseEntity<>("입력값이 정확하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }*/
+
+        if (errors.hasErrors()) {
+//            return new ResponseEntity<>(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
+            List<ResponseError> responseErrors = new ArrayList<>();
+
+            /*errors.getAllErrors().stream().forEach(e -> {
+
+                ResponseError responseError = new ResponseError();
+                responseError.setField(((FieldError) e).getField());
+                responseError.setMessage(e.getDefaultMessage());
+                responseErrors.add(responseError);
+            });*/
+            errors.getAllErrors().stream().forEach(e -> {
+                responseErrors.add(ResponseError.of( (FieldError) e));
+            });
+
+
+            return new ResponseEntity<>(responseErrors, HttpStatus.BAD_REQUEST);
+        }
+
+        // 정상적인 저장..
+        noticeRepository.save(Notice.builder()
+                .title(noticeInput.getTitle())
+                .contents(noticeInput.getContents())
+                .hits(0)
+                .likes(0)
+                .regDate(LocalDateTime.now())
+                .build());
+
+        return ResponseEntity.ok().build();
     }
 }
 
