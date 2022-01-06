@@ -276,6 +276,18 @@ public class ApiNoticeController {
     public void deleteAll() {
         noticeRepository.deleteAll();
     }
+
+    @PostMapping("/api/notice6")
+    public void addNotice6(@RequestBody NoticeInput noticeInput) {
+        Notice notice = Notice.builder()
+                .title(noticeInput.getTitle())
+                .contents(noticeInput.getContents())
+                .hits(0)
+                .likes(0)
+                .regDate(LocalDateTime.now())
+                .build();
+        noticeRepository.save(notice);
+    }
 }
 
 
