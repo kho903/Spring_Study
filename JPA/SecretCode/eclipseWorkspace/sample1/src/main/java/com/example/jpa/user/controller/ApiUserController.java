@@ -16,6 +16,7 @@ import com.example.jpa.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -183,6 +184,41 @@ public class ApiUserController {
                 .orElseThrow(() -> new PasswordNotMatchException("비밀번호가 일치하지 않습니다."));
 
         user.setPassword(userInputPassword.getNewPassword());
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private String getEncryptPassword(String password) {
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder.encode(password);
+    }
+
+    @PostMapping("/api/user4")
+    public ResponseEntity<?> addUser4(@RequestBody @Valid UserInput userInput, Errors errors) {
+
+        List<ResponseError> responseErrorList = new ArrayList<>();
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach((e) -> {
+                responseErrorList.add(ResponseError.of((FieldError) e));
+            });
+            return new ResponseEntity<>(responseErrorList, HttpStatus.BAD_REQUEST);
+        }
+
+        if (userRepository.countByEmail(userInput.getEmail())> 0) {
+            throw new ExistsEmailException("이미 존재하는 이메일입니다.");
+        }
+
+        String encryptPassword = getEncryptPassword(userInput.getPassword());
+
+        User user = User.builder()
+                .email(userInput.getEmail())
+                .userName((userInput.getUserName()))
+                .phone(userInput.getPhone())
+                .password(encryptPassword)
+                .regDate(LocalDateTime.now())
+                .build();
         userRepository.save(user);
 
         return ResponseEntity.ok().build();
