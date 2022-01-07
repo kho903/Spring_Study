@@ -2,6 +2,7 @@ package com.example.jpa.notice.controller;
 
 import com.example.jpa.notice.entity.Notice;
 import com.example.jpa.notice.exception.AlreadyDeletedException;
+import com.example.jpa.notice.exception.DuplicateNoticeException;
 import com.example.jpa.notice.exception.NoticeNotFoundException;
 import com.example.jpa.notice.model.NoticeDeleteInput;
 import com.example.jpa.notice.model.NoticeInput;
@@ -9,6 +10,7 @@ import com.example.jpa.notice.model.NoticeModel;
 import com.example.jpa.notice.model.ResponseError;
 import com.example.jpa.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
+import org.openjsse.net.ssl.OpenJSSE;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -369,6 +371,49 @@ public class ApiNoticeController {
                 = noticeRepository.findAll(PageRequest.of(0, size, Sort.Direction.DESC, "regDate"));
 
         return noticeList;
+    }
+
+    @ExceptionHandler(DuplicateNoticeException.class)
+    public ResponseEntity<?> handlerDuplicateNoticeException(DuplicateNoticeException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/api/notice9")
+    public void addNotice9(@RequestBody NoticeInput noticeInput) {
+
+        // 중복 체크
+        LocalDateTime checkDate = LocalDateTime.now().minusMinutes(1);
+
+        /*Optional<List<Notice>> noticeList = noticeRepository.findByTitleAndContentsAndRegDateIsGreaterThanEqual(
+                noticeInput.getTitle(),
+                noticeInput.getContents(),
+                checkDate
+        );
+
+        if (noticeList.isPresent()) {
+            if (noticeList.get().size() > 0) {
+                throw new DuplicateNoticeException("1분 이내에 등록된 동일한 공지사항이 존재합니다.");
+            }
+        }*/
+
+        int noticeCount = noticeRepository.countByTitleAndContentsAndRegDateIsGreaterThanEqual(
+                noticeInput.getTitle(),
+                noticeInput.getContents(),
+                checkDate
+        );
+
+        if (noticeCount > 0) {
+            throw new DuplicateNoticeException("1분 이내에 등록된 동일한 공지사항이 존재합니다.");
+        }
+
+        noticeRepository.save(Notice.builder()
+                .title(noticeInput.getTitle())
+                .contents(noticeInput.getContents())
+                .hits(0)
+                .likes(0)
+                .regDate(LocalDateTime.now())
+                .build());
+
     }
 }
 
