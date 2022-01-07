@@ -4,6 +4,7 @@ import com.example.jpa.notice.entity.Notice;
 import com.example.jpa.notice.model.ResponseError;
 import com.example.jpa.notice.repository.NoticeRepository;
 import com.example.jpa.user.entity.User;
+import com.example.jpa.user.exception.ExistsEmailException;
 import com.example.jpa.user.exception.UserNotFoundException;
 import com.example.jpa.user.model.NoticeResponse;
 import com.example.jpa.user.model.UserInput;
@@ -131,6 +132,38 @@ public class ApiUserController {
         });
 
         return noticeResponsesList;
+    }
+
+    @ExceptionHandler(ExistsEmailException.class)
+    public ResponseEntity<?> handlerExistsEmailException(ExistsEmailException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/api/user3")
+    public ResponseEntity<?> addUser3(@RequestBody @Valid UserInput userInput, Errors errors) {
+
+        List<ResponseError> responseErrorList = new ArrayList<>();
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach((e) -> {
+                responseErrorList.add(ResponseError.of((FieldError) e));
+            });
+            return new ResponseEntity<>(responseErrorList, HttpStatus.BAD_REQUEST);
+        }
+
+        if (userRepository.countByEmail(userInput.getEmail())> 0) {
+            throw new ExistsEmailException("이미 존재하는 이메일입니다.");
+        }
+
+        User user = User.builder()
+                .email(userInput.getEmail())
+                .userName((userInput.getUserName()))
+                .phone(userInput.getPhone())
+                .password(userInput.getPassword())
+                .regDate(LocalDateTime.now())
+                .build();
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
     }
 }
 
