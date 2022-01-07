@@ -4,6 +4,7 @@ import com.example.jpa.notice.model.ResponseError;
 import com.example.jpa.user.entity.User;
 import com.example.jpa.user.exception.UserNotFoundException;
 import com.example.jpa.user.model.UserInput;
+import com.example.jpa.user.model.UserResponse;
 import com.example.jpa.user.model.UserUpdate;
 import com.example.jpa.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -96,6 +98,18 @@ public class ApiUserController {
         user.setUpdateDate(LocalDateTime.now());
         userRepository.save(user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/api/user/{id}")
+    public UserResponse getUser(@PathVariable Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("사용자 정보가 없습니다."));
+
+//        UserResponse userResponse = new UserResponse(user);
+        UserResponse userResponse = UserResponse.of(user);
+
+        return userResponse;
     }
 }
 
