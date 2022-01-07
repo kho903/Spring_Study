@@ -12,8 +12,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
-    generate-ddl: false
+      ddl-auto: create-drop
+    generate-ddl: true
 
     properties:
       format-sql: true
