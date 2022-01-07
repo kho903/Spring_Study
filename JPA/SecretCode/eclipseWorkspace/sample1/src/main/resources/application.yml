@@ -19,6 +19,7 @@ spring:
       format-sql: true
       hibernate:
         show-sql: true
+        format_sql: true
 
   mvc:
     hiddenmethod:

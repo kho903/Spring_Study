@@ -14,11 +14,13 @@ import com.example.jpa.user.model.UserResponse;
 import com.example.jpa.user.model.UserUpdate;
 import com.example.jpa.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -220,6 +222,24 @@ public class ApiUserController {
                 .regDate(LocalDateTime.now())
                 .build();
         userRepository.save(user);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/api/user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("사용자 정보가 없습니다."));
+
+        try {
+            userRepository.delete(user);
+        } catch (DataIntegrityViolationException e) {
+            String message = "제약조건에 문제가 발생하였습니다.";
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            String message = "회원탈되 중 문제가 발생하였습니다.";
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
 
         return ResponseEntity.ok().build();
     }
