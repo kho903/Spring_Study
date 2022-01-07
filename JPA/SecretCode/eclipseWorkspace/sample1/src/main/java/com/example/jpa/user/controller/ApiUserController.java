@@ -1,7 +1,9 @@
 package com.example.jpa.user.controller;
 
 import com.example.jpa.notice.entity.Notice;
+import com.example.jpa.notice.entity.NoticeLike;
 import com.example.jpa.notice.model.ResponseError;
+import com.example.jpa.notice.repository.NoticeLikeRepository;
 import com.example.jpa.notice.repository.NoticeRepository;
 import com.example.jpa.user.entity.User;
 import com.example.jpa.user.exception.ExistsEmailException;
@@ -42,6 +44,7 @@ import java.util.UUID;
 public class ApiUserController {
     private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
+    private final NoticeLikeRepository noticeLikeRepository;
 
     @PostMapping("/api/user")
     public ResponseEntity<?> addUser(@RequestBody @Valid UserInput userInput, Errors errors) {
@@ -282,6 +285,16 @@ public class ApiUserController {
         System.out.println(message);
     }
 
+    @GetMapping("/api/user/{id}/notice/like")
+    public List<NoticeLike> likeNotice(@PathVariable Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("사용자 정보가 없습니다."));
+
+        List<NoticeLike> noticeLikeList = noticeLikeRepository.findByUser(user);
+
+        return noticeLikeList;
+    }
 }
 
 
