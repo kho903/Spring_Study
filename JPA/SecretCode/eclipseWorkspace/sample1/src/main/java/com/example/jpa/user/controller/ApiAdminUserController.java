@@ -2,12 +2,14 @@ package com.example.jpa.user.controller;
 
 import com.example.jpa.user.entity.User;
 import com.example.jpa.user.model.ResponseMessage;
+import com.example.jpa.user.model.UserSearch;
 import com.example.jpa.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -40,5 +42,14 @@ public class ApiAdminUserController {
         }
 
         return ResponseEntity.ok().body(ResponseMessage.success(user));
+    }
+
+    @GetMapping("/api/admin/user/search")
+    public ResponseEntity<?> findUser(@RequestBody UserSearch userSearch) {
+
+        List<User> userList = userRepository.findByEmailContainsOrPhoneContainsOrUserNameContains(
+                userSearch.getEmail(), userSearch.getPhone(), userSearch.getUserName());
+
+        return ResponseEntity.ok().body(ResponseMessage.success(userList));
     }
 }
