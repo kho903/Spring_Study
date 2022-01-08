@@ -2,6 +2,8 @@ package com.example.jpa.user.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.example.jpa.notice.entity.Notice;
 import com.example.jpa.notice.entity.NoticeLike;
 import com.example.jpa.notice.model.ResponseError;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -380,6 +383,37 @@ public class ApiUserController {
                 .sign(Algorithm.HMAC512("jikim".getBytes()));
 
         return ResponseEntity.ok().body(UserLoginToken.builder().token(token).build());
+    }
+
+    @PatchMapping("/api/user/login")
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        String token = request.getHeader("K-TOKEN");
+        String email = "";
+        try {
+             email = JWT.require(Algorithm.HMAC512("jikim".getBytes()))
+                    .build()
+                    .verify(token)
+                    .getIssuer();
+        } catch (SignatureVerificationException | IllegalArgumentException | JWTDecodeException e) {
+            throw new PasswordNotMatchException("비밀번호가 일치하지 않습니다.");
+        } catch (Exception e) {
+            throw new PasswordNotMatchException("토큰 발행에 실패하였습니다.");
+        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("사용자 정보가 없습니다."));
+
+        LocalDateTime expiredDatetime = LocalDateTime.now().plusMonths(1);
+        Date expiredDate = java.sql.Timestamp.valueOf(expiredDatetime);
+
+        String newToken = JWT.create()
+                .withExpiresAt(expiredDate)
+                .withClaim("user_id", user.getId())
+                .withSubject(user.getUserName())
+                .withIssuer(user.getEmail())
+                .sign(Algorithm.HMAC512("jikim".getBytes()));
+
+        return ResponseEntity.ok().body(UserLoginToken.builder().token(newToken).build());
+
     }
 }
 
