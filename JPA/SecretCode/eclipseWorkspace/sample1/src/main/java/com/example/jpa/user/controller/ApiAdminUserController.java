@@ -117,6 +117,25 @@ public class ApiAdminUserController {
 
         return ResponseEntity.ok().body(ResponseMessage.success());
     }
+
+
+    @PatchMapping("/api/admin/user/{id}/unlock")
+    public ResponseEntity<?> userUnLock(@PathVariable Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (!optionalUser.isPresent()) {
+            return new ResponseEntity<>(ResponseMessage.fail("사용자 정보가 존재하지 않습니다."), HttpStatus.BAD_REQUEST);
+        }
+        User user = optionalUser.get();
+
+        if (!user.isLockYn()) {
+            return new ResponseEntity<>(ResponseMessage.fail("이미 접속제한이 해제 된 사용자입니다."), HttpStatus.BAD_REQUEST);
+        }
+
+        user.setLockYn(false);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body(ResponseMessage.success());
+    }
 }
 
 
