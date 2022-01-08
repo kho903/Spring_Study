@@ -1,5 +1,6 @@
 package com.example.jpa.user.entity;
 
+import com.example.jpa.user.model.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,12 +8,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -42,4 +42,8 @@ public class User {
 
     @Column
     private LocalDateTime updateDate;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 }
