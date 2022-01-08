@@ -350,6 +350,37 @@ public class ApiUserController {
 
         return ResponseEntity.ok().body(UserLoginToken.builder().token(token).build());
     }
+
+    @PostMapping("/api/user/login/v3")
+    public ResponseEntity<?> createTokenV3(@RequestBody @Valid UserLogin userLogin, Errors errors) {
+
+        List<ResponseError> responseErrorList = new ArrayList<>();
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach((e) -> {
+                responseErrorList.add(ResponseError.of((FieldError) e));
+            });
+            return new ResponseEntity<>(responseErrorList, HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userRepository.findByEmail(userLogin.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("사용자 정보가 없습니다."));
+
+        if (!PasswordUtils.equalPassword(userLogin.getPassword(), user.getPassword())) {
+            throw new PasswordNotMatchException("비밀번호가 일치하지 않습니다.");
+        }
+
+        LocalDateTime expiredDatetime = LocalDateTime.now().plusMonths(1);
+        Date expiredDate = java.sql.Timestamp.valueOf(expiredDatetime);
+
+        String token = JWT.create()
+                .withExpiresAt(expiredDate)
+                .withClaim("user_id", user.getId())
+                .withSubject(user.getUserName())
+                .withIssuer(user.getEmail())
+                .sign(Algorithm.HMAC512("jikim".getBytes()));
+
+        return ResponseEntity.ok().body(UserLoginToken.builder().token(token).build());
+    }
 }
 
 
