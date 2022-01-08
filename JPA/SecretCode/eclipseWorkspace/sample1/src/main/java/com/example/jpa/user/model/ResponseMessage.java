@@ -42,4 +42,18 @@ public class ResponseMessage {
                 .data(data)
                 .build();
     }
+
+
+
+    public static ResponseMessage success() {
+        return ResponseMessage.builder()
+                .header(ResponseMessageHeader.builder()
+                        .result(true)
+                        .resultCode("")
+                        .message("")
+                        .status(HttpStatus.OK.value())
+                        .build())
+                .data(null)
+                .build();
+    }
 }

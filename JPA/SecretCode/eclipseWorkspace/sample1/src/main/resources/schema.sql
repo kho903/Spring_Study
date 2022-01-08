@@ -11,7 +11,9 @@ create table USER
     PHONE       VARCHAR(255),
     REG_DATE    TIMESTAMP,
     UPDATE_DATE TIMESTAMP,
-    STATUS      VARCHAR(255)
+    STATUS      VARCHAR(255),
+
+    LOCK_YN     BOOLEAN
 );
 
 -- auto-generated definition

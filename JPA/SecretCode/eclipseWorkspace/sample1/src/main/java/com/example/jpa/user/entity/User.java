@@ -46,4 +46,7 @@ public class User {
     @Column
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
+    @Column
+    private boolean lockYn;
 }
