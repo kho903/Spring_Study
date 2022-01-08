@@ -22,6 +22,7 @@ import com.example.jpa.user.model.UserLoginToken;
 import com.example.jpa.user.model.UserResponse;
 import com.example.jpa.user.model.UserUpdate;
 import com.example.jpa.user.repository.UserRepository;
+import com.example.jpa.util.JWTUtils;
 import com.example.jpa.util.PasswordUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -414,6 +416,23 @@ public class ApiUserController {
 
         return ResponseEntity.ok().body(UserLoginToken.builder().token(newToken).build());
 
+    }
+
+    @DeleteMapping("/api/user/login")
+    public ResponseEntity<?> removeToken(@RequestHeader("K-TOKEN") String token) {
+        String email = "";
+
+        try {
+            email = JWTUtils.getIssuer(token);
+        }  catch (SignatureVerificationException | IllegalArgumentException | JWTDecodeException e) {
+            return new ResponseEntity<>("토큰 정보가 정확하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        // 세션, 쿠키 삭제
+        // 클라이언트 쿠키 / 로컬 스토리지 / 세션 스토리지
+        // 블랙리스트 작성
+
+        return ResponseEntity.ok().build();
     }
 }
 
