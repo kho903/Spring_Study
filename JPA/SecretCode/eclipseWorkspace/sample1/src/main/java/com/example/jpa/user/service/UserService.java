@@ -12,4 +12,6 @@ public interface UserService {
     List<User> getTodayUsers();
 
     List<UserNoticeCount> getUserNoticeCount();
+
+    List<UserNoticeCount> getUserLogCount();
 }

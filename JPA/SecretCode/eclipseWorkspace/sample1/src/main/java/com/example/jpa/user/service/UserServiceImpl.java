@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
     public List<UserNoticeCount> getUserNoticeCount() {
         return userCustomRepository.findUserNoticeCount();
     }
+
+    @Override
+    public List<UserNoticeCount> getUserLogCount() {
+        return userCustomRepository.findUserLogCount();
+    }
 }
