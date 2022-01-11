@@ -169,6 +169,12 @@ public class ApiAdminUserController {
         List<UserNoticeCount> userLogCounts = userService.getUserLogCount();
         return ResponseEntity.ok().body(ResponseMessage.success(userLogCounts));
     }
+
+    @GetMapping("/api/admin/user/like/best")
+    public ResponseEntity<?> bestLikeCount() {
+        List<UserNoticeCount> userLogCounts = userService.getUserLikeBest();
+        return ResponseEntity.ok().body(ResponseMessage.success(userLogCounts));
+    }
 }
 
 
