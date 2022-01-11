@@ -5,6 +5,7 @@ import com.example.jpa.user.entity.User;
 import com.example.jpa.user.entity.UserLoginHistory;
 import com.example.jpa.user.exception.UserNotFoundException;
 import com.example.jpa.user.model.ResponseMessage;
+import com.example.jpa.user.model.UserNoticeCount;
 import com.example.jpa.user.model.UserSearch;
 import com.example.jpa.user.model.UserStatusInput;
 import com.example.jpa.user.model.UserSummary;
@@ -154,7 +155,19 @@ public class ApiAdminUserController {
 
         return ResponseEntity.ok().body(ResponseMessage.success(users));
     }
+
+    @GetMapping("/api/admin/user/notice/count")
+    public ResponseEntity<?> userNoticeCount() {
+
+        List<UserNoticeCount> userNoticeCountList = userService.getUserNoticeCount();
+
+        return ResponseEntity.ok().body(ResponseMessage.success(userNoticeCountList));
+    }
 }
+
+
+
+
 
 
 
