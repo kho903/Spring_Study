@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -60,6 +61,16 @@ public class ApiBoardController {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/board/{id}")
+    public ResponseEntity<?> deleteBoardType(@PathVariable Long id) {
+        ServiceResult result = boardService.deleteBoard(id);
+
+        if (!result.isResult()) {
+            return ResponseEntity.ok().body(ResponseMessage.fail(result.getMessage()));
+        }
+        return ResponseEntity.ok().body(ResponseMessage.success());
     }
 }
 
