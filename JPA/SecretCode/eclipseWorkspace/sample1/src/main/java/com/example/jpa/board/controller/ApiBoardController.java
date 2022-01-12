@@ -2,6 +2,7 @@ package com.example.jpa.board.controller;
 
 import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardTypeInput;
+import com.example.jpa.board.model.BoardTypeUsing;
 import com.example.jpa.board.model.ServiceResult;
 import com.example.jpa.board.service.BoardService;
 import com.example.jpa.notice.model.ResponseError;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -80,6 +82,18 @@ public class ApiBoardController {
         List<BoardType> boardTypeList = boardService.getAllBoardType();
 
         return ResponseEntity.ok().body(ResponseMessage.success(boardTypeList));
+    }
+
+    @PatchMapping("/board/type/{id}/using")
+    public ResponseEntity<?> usingBoardType(
+            @PathVariable Long id,
+            @RequestBody BoardTypeUsing boardTypeUsing) {
+        ServiceResult result = boardService.setBoardTypeUsing(id, boardTypeUsing);
+
+        if (!result.isResult()) {
+            return ResponseEntity.ok().body(ResponseMessage.fail(result.getMessage()));
+        }
+        return ResponseEntity.ok().body(ResponseMessage.success(result));
     }
 }
 
