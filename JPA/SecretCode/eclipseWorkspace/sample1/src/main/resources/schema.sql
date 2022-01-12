@@ -59,5 +59,6 @@ create table BOARD_TYPE
 (
     ID          BIGINT auto_increment primary key,
     BOARD_NAME  VARCHAR(255),
-    REG_DATE    TIMESTAMP
+    REG_DATE    TIMESTAMP,
+    UPDATE_DATE TIMESTAMP
 );
