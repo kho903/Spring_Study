@@ -102,6 +102,12 @@ public class ApiBoardController {
         List<BoardTypeCount> list = boardService.getBoardTypeCount();
         return ResponseEntity.ok().body(list);
     }
+
+    @PatchMapping("/board/{id}/top")
+    public ResponseEntity<?> boardPostTop(@PathVariable Long id) {
+        ServiceResult result = boardService.setBoardTop(id);
+        return ResponseEntity.ok().body(result);
+    }
 }
 
 
