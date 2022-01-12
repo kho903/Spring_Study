@@ -1,5 +1,6 @@
 package com.example.jpa.board.controller;
 
+import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardTypeInput;
 import com.example.jpa.board.model.ServiceResult;
 import com.example.jpa.board.service.BoardService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -63,7 +65,7 @@ public class ApiBoardController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/board/{id}")
+    @DeleteMapping("/board/type/{id}")
     public ResponseEntity<?> deleteBoardType(@PathVariable Long id) {
         ServiceResult result = boardService.deleteBoard(id);
 
@@ -71,6 +73,13 @@ public class ApiBoardController {
             return ResponseEntity.ok().body(ResponseMessage.fail(result.getMessage()));
         }
         return ResponseEntity.ok().body(ResponseMessage.success());
+    }
+
+    @GetMapping("/board/type")
+    public ResponseEntity<?> boardType() {
+        List<BoardType> boardTypeList = boardService.getAllBoardType();
+
+        return ResponseEntity.ok().body(ResponseMessage.success(boardTypeList));
     }
 }
 
