@@ -297,4 +297,28 @@ public class BoardServiceImpl implements BoardService {
 
         return ServiceResult.success();
     }
+
+    @Override
+    public ServiceResult removeScrap(Long id, String email) {
+
+        Optional<BoardScrap> optionalBoardScrap = boardScrapRepository.findById(id);
+        if (!optionalBoardScrap.isPresent()) {
+            return ServiceResult.fail("삭제할 스크랩이 업습니다.");
+        }
+        BoardScrap boardScrap = optionalBoardScrap.get();
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (!optionalUser.isPresent()) {
+            return ServiceResult.fail("회원정보가 존재하지 않습니다.");
+        }
+        User user = optionalUser.get();
+        // 내 스크립인지를 확인 필요
+        if (!user.getId().equals(boardScrap.getUser().getId())) {
+            return ServiceResult.fail("본인의 스크랩만 삭제할 수 있습니다.");
+        }
+
+        boardScrapRepository.delete(boardScrap);
+        return ServiceResult.success();
+
+    }
 }

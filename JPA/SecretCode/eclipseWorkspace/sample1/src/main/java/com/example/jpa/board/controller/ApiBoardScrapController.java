@@ -6,6 +6,7 @@ import com.example.jpa.common.model.ResponseResult;
 import com.example.jpa.util.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,6 +32,20 @@ public class ApiBoardScrapController {
         }
 
         return ResponseResult.result(boardService.scrapBoard(id, email));
+    }
+
+    @DeleteMapping("/scrap/{id}")
+    public ResponseEntity<?> deleteBoardScrap(
+            @PathVariable Long id,
+            @RequestHeader("K-TOKEN") String token) {
+        String email = "";
+        try {
+            email = JWTUtils.getIssuer(token);
+        } catch (JWTVerificationException e) {
+            return ResponseResult.fail("토큰 정보가 정확하지 않습니다.");
+        }
+
+        return ResponseResult.result(boardService.removeScrap(id, email));
     }
 }
 
