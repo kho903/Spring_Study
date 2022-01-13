@@ -4,6 +4,7 @@ import com.example.jpa.board.entity.Board;
 import com.example.jpa.board.entity.BoardBadReport;
 import com.example.jpa.board.entity.BoardHits;
 import com.example.jpa.board.entity.BoardLike;
+import com.example.jpa.board.entity.BoardScrap;
 import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardBadReportInput;
 import com.example.jpa.board.model.BoardPeriod;
@@ -16,6 +17,7 @@ import com.example.jpa.board.repository.BoardBadReportRepository;
 import com.example.jpa.board.repository.BoardHitsRepository;
 import com.example.jpa.board.repository.BoardLikeRepository;
 import com.example.jpa.board.repository.BoardRepository;
+import com.example.jpa.board.repository.BoardScrapRepository;
 import com.example.jpa.board.repository.BoardTypeRepository;
 import com.example.jpa.user.entity.User;
 import com.example.jpa.user.repository.UserRepository;
@@ -36,6 +38,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardHitsRepository boardHitsRepository;
     private final BoardLikeRepository boardLikeRepository;
     private final BoardBadReportRepository boardBadReportRepository;
+    private final BoardScrapRepository boardScrapRepository;
 
     private final UserRepository userRepository;
 
@@ -264,5 +267,34 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<BoardBadReport> badReportList() {
         return boardBadReportRepository.findAll();
+    }
+
+    @Override
+    public ServiceResult scrapBoard(Long id, String email) {
+        Optional<Board> optionalBoard = boardRepository.findById(id);
+        if (!optionalBoard.isPresent()) {
+            return ServiceResult.fail("게시물이 존재하지 않습니다.");
+        }
+        Board board = optionalBoard.get();
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (!optionalUser.isPresent()) {
+            return ServiceResult.fail("회원정보가 존재하지 않습니다.");
+        }
+        User user = optionalUser.get();
+
+        BoardScrap boardScrap = BoardScrap.builder()
+                .user(user)
+                .boardId(board.getId())
+                .boardUserId(board.getUser().getId())
+                .boardTypeId(board.getBoardType().getId())
+                .boardTitle(board.getTitle())
+                .boardContents(board.getContents())
+                .boardRegDate(board.getRegDate())
+                .regDate(LocalDateTime.now())
+                .build();
+        boardScrapRepository.save(boardScrap);
+
+        return ServiceResult.success();
     }
 }
