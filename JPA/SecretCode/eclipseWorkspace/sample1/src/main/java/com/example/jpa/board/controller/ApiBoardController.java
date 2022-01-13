@@ -2,6 +2,7 @@ package com.example.jpa.board.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.jpa.board.entity.BoardType;
+import com.example.jpa.board.model.BoardBadReportInput;
 import com.example.jpa.board.model.BoardPeriod;
 import com.example.jpa.board.model.BoardTypeCount;
 import com.example.jpa.board.model.BoardTypeInput;
@@ -172,6 +173,22 @@ public class ApiBoardController {
         }
 
         ServiceResult result = boardService.setBoardUnLike(id, email);
+        return ResponseResult.result(result);
+    }
+
+    @PutMapping("/board/{id}/badreport")
+    public ResponseEntity<?> boardBadReport(
+            @PathVariable Long id,
+            @RequestHeader("K-TOKEN") String token,
+            @RequestBody BoardBadReportInput boardBadReportInput) {
+        String email;
+        try {
+            email = JWTUtils.getIssuer(token);
+        } catch (JWTVerificationException e) {
+            return  ResponseResult.fail("토큰 정보가 정확하지 않습니다.");
+        }
+
+        ServiceResult result = boardService.addBadReport(id, email, boardBadReportInput);
         return ResponseResult.result(result);
     }
 }
