@@ -1,5 +1,6 @@
 package com.example.jpa.board.controller;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardPeriod;
 import com.example.jpa.board.model.BoardTypeCount;
@@ -10,6 +11,7 @@ import com.example.jpa.board.service.BoardService;
 import com.example.jpa.common.model.ResponseResult;
 import com.example.jpa.notice.model.ResponseError;
 import com.example.jpa.user.model.ResponseMessage;
+import com.example.jpa.util.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -117,7 +120,7 @@ public class ApiBoardController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PatchMapping("/api/board/{id}/publish")
+    @PatchMapping("/board/{id}/publish")
     public ResponseEntity<?> boardPeriod(
             @PathVariable Long id, @RequestBody BoardPeriod boardPeriod) {
         ServiceResult result = boardService.setBoardPeriod(id, boardPeriod);
@@ -126,6 +129,23 @@ public class ApiBoardController {
             return ResponseResult.fail(result.getMessage());
         }
 
+        return ResponseResult.success();
+    }
+
+    @PutMapping("/board/{id}/hits")
+    public ResponseEntity<?> boardHits(@PathVariable Long id, @RequestHeader("K-TOKEN") String token) {
+
+        String email;
+        try {
+            email = JWTUtils.getIssuer(token);
+        } catch (JWTVerificationException e) {
+            return  ResponseResult.fail("토큰 정보가 정확하지 않습니다.");
+        }
+
+        ServiceResult result = boardService.setBoardHits(id, email);
+        if (result.isFail()) {
+            return ResponseResult.fail(result.getMessage());
+        }
         return ResponseResult.success();
     }
 }
