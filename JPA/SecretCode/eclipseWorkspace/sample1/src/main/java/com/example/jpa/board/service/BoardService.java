@@ -1,6 +1,7 @@
 package com.example.jpa.board.service;
 
 import com.example.jpa.board.entity.BoardType;
+import com.example.jpa.board.model.BoardPeriod;
 import com.example.jpa.board.model.BoardTypeCount;
 import com.example.jpa.board.model.BoardTypeInput;
 import com.example.jpa.board.model.BoardTypeUsing;
@@ -26,4 +27,7 @@ public interface BoardService {
 
     // 게시글을 최상단에 배치함
     ServiceResult setBoardTop(Long id, boolean topYn);
+
+    // 게시글의 게시기간을 설정
+    ServiceResult setBoardPeriod(Long id, BoardPeriod boardPeriod);
 }

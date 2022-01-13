@@ -1,11 +1,13 @@
 package com.example.jpa.board.controller;
 
 import com.example.jpa.board.entity.BoardType;
+import com.example.jpa.board.model.BoardPeriod;
 import com.example.jpa.board.model.BoardTypeCount;
 import com.example.jpa.board.model.BoardTypeInput;
 import com.example.jpa.board.model.BoardTypeUsing;
 import com.example.jpa.board.model.ServiceResult;
 import com.example.jpa.board.service.BoardService;
+import com.example.jpa.common.model.ResponseResult;
 import com.example.jpa.notice.model.ResponseError;
 import com.example.jpa.user.model.ResponseMessage;
 import lombok.RequiredArgsConstructor;
@@ -113,6 +115,18 @@ public class ApiBoardController {
     public ResponseEntity<?> boardPostTopClear(@PathVariable Long id) {
         ServiceResult result = boardService.setBoardTop(id, false);
         return ResponseEntity.ok().body(result);
+    }
+
+    @PatchMapping("/api/board/{id}/publish")
+    public ResponseEntity<?> boardPeriod(
+            @PathVariable Long id, @RequestBody BoardPeriod boardPeriod) {
+        ServiceResult result = boardService.setBoardPeriod(id, boardPeriod);
+
+        if (!result.isResult()) {
+            return ResponseResult.fail(result.getMessage());
+        }
+
+        return ResponseResult.success();
     }
 }
 

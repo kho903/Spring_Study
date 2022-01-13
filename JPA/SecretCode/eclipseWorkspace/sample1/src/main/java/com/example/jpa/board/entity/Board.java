@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -45,4 +46,10 @@ public class Board {
 
     @Column
     private boolean topYn;
+
+    @Column
+    private LocalDate publishStartDate;
+
+    @Column
+    private LocalDate publishEndDate;
 }
