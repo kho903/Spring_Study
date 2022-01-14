@@ -18,7 +18,7 @@ public class ResponseResult {
         return success(null);
     }
 
-    public static ResponseEntity<?> success(List<BoardBadReport> data) {
+    public static ResponseEntity<?> success(Object data) {
         return ResponseEntity.ok().body(ResponseMessage.success(data));
     }
 
