@@ -2,6 +2,7 @@ package com.example.jpa.user.service;
 
 import com.example.jpa.board.model.ServiceResult;
 import com.example.jpa.user.entity.User;
+import com.example.jpa.user.model.UserLogin;
 import com.example.jpa.user.model.UserNoticeCount;
 import com.example.jpa.user.model.UserSummary;
 
@@ -24,4 +25,7 @@ public interface UserService {
 
     // 관심 사용자 삭제
     ServiceResult removeInterestUser(String email, Long interestId);
+
+    // 로그인 정보 확인
+    User login(UserLogin userLogin);
 }

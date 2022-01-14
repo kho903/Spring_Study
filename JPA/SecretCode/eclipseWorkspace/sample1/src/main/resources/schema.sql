@@ -199,5 +199,12 @@ create table USER_POINT
         foreign key (USER_ID) references USER (ID)
 );
 
+create table LOGS
+(
+    ID          BIGINT auto_increment primary key,
+    TEXT        CLOB,
+    REG_DATE    TIMESTAMP
+);
+
 
 
