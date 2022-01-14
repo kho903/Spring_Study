@@ -21,4 +21,7 @@ public interface UserService {
 
     // 관심 사용자 등록
     ServiceResult addInterestUser(String email, Long id);
+
+    // 관심 사용자 삭제
+    ServiceResult removeInterestUser(String email, Long interestId);
 }
