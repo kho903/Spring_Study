@@ -402,4 +402,13 @@ public class BoardServiceImpl implements BoardService {
 
         return boardCommentRepository.findByUser(user);
     }
+
+    @Override
+    public Board detail(Long id) {
+        Optional<Board> optionalBoard = boardRepository.findById(id);
+        if (!optionalBoard.isPresent()) {
+            throw new BizException("게시글이 존재하지 않습니다.");
+        }
+        return optionalBoard.get();
+    }
 }
