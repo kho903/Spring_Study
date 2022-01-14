@@ -173,3 +173,18 @@ create table USER_INTEREST
     constraint FK_USER_INTEREST_USER_ID foreign key (USER_ID) references USER (ID),
     constraint FK_USER_INTEREST_INTEREST_USER_ID foreign key (INTEREST_USER_ID) references USER (ID)
 );
+
+-- auto-generated definition
+create table BOARD_COMMENT
+(
+    ID          BIGINT auto_increment primary key,
+    COMMENTS    VARCHAR(255),
+    REG_DATE    TIMESTAMP,
+    BOARD_ID    BIGINT,
+    USER_ID     BIGINT,
+    constraint FK_BOARD_COMMENT_USER_ID
+        foreign key (USER_ID) references USER (ID),
+    constraint FK_BOARD_COMMENT_BOARD_ID
+        foreign key (BOARD_ID) references BOARD (ID)
+);
+
