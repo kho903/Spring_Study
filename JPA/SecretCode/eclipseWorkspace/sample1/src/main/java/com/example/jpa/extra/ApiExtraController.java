@@ -1,6 +1,7 @@
 package com.example.jpa.extra;
 
 import com.example.jpa.common.model.ResponseResult;
+import com.example.jpa.extra.model.AirInput;
 import com.example.jpa.extra.model.OpenApiResult;
 import com.example.jpa.extra.model.PharmacySearch;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -119,4 +120,30 @@ public class ApiExtraController {
 
         return ResponseResult.success(jsonResult);
     }
+
+
+    @GetMapping("/api/extra/air")
+    public String air(@RequestBody AirInput airInput) {
+
+        String apiKey = "";
+
+        String url = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=%s&returnType=json&numOfRows=100&pageNo=1&sidoName=%s&ver=1.0";
+        String apiResult = "";
+        try {
+            URI uri = new URI(String.format(url, apiKey, URLEncoder.encode(airInput.getSearchSido(), "UTF-8")));
+
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+            String result = restTemplate.getForObject(uri, String.class);
+            apiResult = result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return apiResult;
+    }
+
 }
