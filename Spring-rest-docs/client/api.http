@@ -1,0 +1,2 @@
+GET {{host}}
+Content-Type: application/json
