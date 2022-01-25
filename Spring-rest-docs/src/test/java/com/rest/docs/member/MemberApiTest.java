@@ -1,11 +1,18 @@
 package com.rest.docs.member;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -16,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(RestDocumentationExtension.class)
 class MemberApiTest {
 
     /**
@@ -28,6 +36,15 @@ class MemberApiTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @BeforeEach
+    void setUp(
+            final WebApplicationContext context,
+            final RestDocumentationContextProvider provider
+    ) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
+                .build();
+    }
 
     // 4. Member 페이징 조회
     @Test
@@ -39,6 +56,7 @@ class MemberApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
         )
                 .andDo(print())
+                .andDo(MockMvcRestDocumentation.document("{class-name}/{method-name}"))
                 .andExpect(status().isOk())
         ;
     }
@@ -51,6 +69,7 @@ class MemberApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
         )
                 .andDo(print())
+                .andDo(MockMvcRestDocumentation.document("{class-name}/{method-name}"))
                 .andExpect(status().isOk())
         ;
     }
@@ -68,6 +87,7 @@ class MemberApiTest {
                             "")
         )
                 .andDo(print())
+                .andDo(MockMvcRestDocumentation.document("{class-name}/{method-name}"))
                 .andExpect(status().isOk());
     }
 
@@ -83,6 +103,7 @@ class MemberApiTest {
                         )
         )
                 .andDo(print())
+                .andDo(MockMvcRestDocumentation.document("{class-name}/{method-name}"))
                 .andExpect(status().isOk());
     }
 }
