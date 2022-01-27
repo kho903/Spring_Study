@@ -1,9 +1,11 @@
 package com.rest.docs.member;
 
+import com.rest.docs.RestDocsConfiguration;
 import com.rest.docs.TestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static com.rest.docs.RestDocsConfiguration.field;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
@@ -69,8 +71,8 @@ class MemberApiTest extends TestSupport {
                 .andDo(
                         restDocs.document(
                                 requestFields(
-                                        fieldWithPath("name").description("name"),
-                                        fieldWithPath("email").description("email")
+                                        fieldWithPath("name").description("name").attributes(field("length", "10")),
+                                        fieldWithPath("email").description("email").attributes(field("length", "30"))
                                 )
                         )
                 )
@@ -91,10 +93,32 @@ class MemberApiTest extends TestSupport {
                                         parameterWithName("id").description("Member ID")
                                 ),
                                 requestFields(
-                                        fieldWithPath("name").description("name")
+                                        fieldWithPath("name").description("name").attributes(field("length", "10"))
                                 )
                         )
                 )
+        ;
+    }
+
+    @Test
+    public void member_create_글자_length_실패() throws Exception {
+        mockMvc.perform(
+                post("/api/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(readJson("/json/member-api/member-create-invalid.json"))
+        )
+                .andExpect(status().isBadRequest())
+        ;
+    }
+
+    @Test
+    public void member_modify_글자_length_실패() throws Exception {
+        mockMvc.perform(
+                put("/api/members/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(readJson("/json/member-api/member-modify-invalid.json"))
+        )
+                .andExpect(status().isBadRequest())
         ;
     }
 }
