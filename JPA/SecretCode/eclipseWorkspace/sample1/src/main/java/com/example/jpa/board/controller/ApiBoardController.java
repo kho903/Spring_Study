@@ -204,6 +204,12 @@ public class ApiBoardController {
         }
         return ResponseResult.success(board);
     }
+
+    @GetMapping("/board")
+    public ResponseEntity<?> list() {
+        List<Board> list = boardService.list();
+        return ResponseResult.success(list);
+    }
 }
 
 

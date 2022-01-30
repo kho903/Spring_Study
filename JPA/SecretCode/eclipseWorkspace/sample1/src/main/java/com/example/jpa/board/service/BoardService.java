@@ -69,4 +69,7 @@ public interface BoardService {
     List<BoardComment> commentList(String email);
 
     Board detail(Long id);
+
+    // 게시글 목록
+    List<Board> list();
 }
