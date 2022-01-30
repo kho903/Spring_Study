@@ -1,5 +1,8 @@
 package com.example.jpa.common.interceptor;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.example.jpa.common.exception.AuthFailException;
+import com.example.jpa.util.JWTUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -18,6 +21,21 @@ public class CommonInterceptor implements HandlerInterceptor {
         log.info(request.getMethod());
         log.info(request.getRequestURI());
 
+        if (!validJWT(request)) {
+            throw new AuthFailException("@@@인증 정보가 정확하지 않습니다.");
+        }
+        return true;
+    }
+
+    private boolean validJWT(HttpServletRequest request) {
+        String token = request.getHeader("K-TOKEN");
+
+        String email = "";
+        try {
+            email = JWTUtils.getIssuer(token);
+        } catch (JWTVerificationException e) {
+            return false;
+        }
         return true;
     }
 }

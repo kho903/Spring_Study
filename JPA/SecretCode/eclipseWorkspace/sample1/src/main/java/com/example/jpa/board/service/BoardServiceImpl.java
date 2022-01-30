@@ -9,6 +9,7 @@ import com.example.jpa.board.entity.BoardLike;
 import com.example.jpa.board.entity.BoardScrap;
 import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardBadReportInput;
+import com.example.jpa.board.model.BoardInput;
 import com.example.jpa.board.model.BoardPeriod;
 import com.example.jpa.board.model.BoardTypeCount;
 import com.example.jpa.board.model.BoardTypeCustomRepository;
@@ -415,5 +416,32 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<Board> list() {
         return boardRepository.findAll();
+    }
+
+    @Override
+    public ServiceResult add(String email, BoardInput boardInput) {
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (!optionalUser.isPresent()) {
+            return ServiceResult.fail("회원정보가 존재하지 않습니다.");
+        }
+        User user = optionalUser.get();
+
+        Optional<BoardType> optionalBoardType = boardTypeRepository.findById(boardInput.getBoardType());
+        if (!optionalBoardType.isPresent()) {
+            return ServiceResult.fail("게시판 정보가 존재하지 않습니다.");
+        }
+        BoardType boardType = optionalBoardType.get();
+
+        Board board = Board.builder()
+                .user(user)
+                .boardType(boardType)
+                .title(boardInput.getTitle())
+                .contents(boardInput.getContents())
+                .regDate(LocalDateTime.now())
+                .build();
+        boardRepository.save(board);
+
+        return ServiceResult.success();
     }
 }

@@ -5,6 +5,7 @@ import com.example.jpa.board.entity.BoardBadReport;
 import com.example.jpa.board.entity.BoardComment;
 import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardBadReportInput;
+import com.example.jpa.board.model.BoardInput;
 import com.example.jpa.board.model.BoardPeriod;
 import com.example.jpa.board.model.BoardTypeCount;
 import com.example.jpa.board.model.BoardTypeInput;
@@ -72,4 +73,7 @@ public interface BoardService {
 
     // 게시글 목록
     List<Board> list();
+
+    // 게시글 작성
+    ServiceResult add(String email, BoardInput boardInput);
 }

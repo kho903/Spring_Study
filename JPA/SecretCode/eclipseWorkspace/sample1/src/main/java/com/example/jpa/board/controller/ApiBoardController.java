@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.jpa.board.entity.Board;
 import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardBadReportInput;
+import com.example.jpa.board.model.BoardInput;
 import com.example.jpa.board.model.BoardPeriod;
 import com.example.jpa.board.model.BoardTypeCount;
 import com.example.jpa.board.model.BoardTypeInput;
@@ -209,6 +210,15 @@ public class ApiBoardController {
     public ResponseEntity<?> list() {
         List<Board> list = boardService.list();
         return ResponseResult.success(list);
+    }
+
+    @PostMapping("/board")
+    public ResponseEntity<?> add(
+            @RequestHeader("K-TOKEN") String token,
+            @RequestBody BoardInput boardInput) {
+        String email = JWTUtils.getIssuer(token);
+        ServiceResult result = boardService.add(email, boardInput);
+        return ResponseResult.result(result);
     }
 }
 

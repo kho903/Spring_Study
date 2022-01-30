@@ -1,0 +1,18 @@
+package com.example.jpa.board.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BoardInput {
+
+    private Long boardType;
+    private String title;
+    private String contents;
+
+}
