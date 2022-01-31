@@ -11,6 +11,7 @@ import com.example.jpa.board.entity.BoardType;
 import com.example.jpa.board.model.BoardBadReportInput;
 import com.example.jpa.board.model.BoardInput;
 import com.example.jpa.board.model.BoardPeriod;
+import com.example.jpa.board.model.BoardReplyInput;
 import com.example.jpa.board.model.BoardTypeCount;
 import com.example.jpa.board.model.BoardTypeCustomRepository;
 import com.example.jpa.board.model.BoardTypeInput;
@@ -24,7 +25,11 @@ import com.example.jpa.board.repository.BoardLikeRepository;
 import com.example.jpa.board.repository.BoardRepository;
 import com.example.jpa.board.repository.BoardScrapRepository;
 import com.example.jpa.board.repository.BoardTypeRepository;
+import com.example.jpa.common.MailComponent;
 import com.example.jpa.common.exception.BizException;
+import com.example.jpa.common.model.ResponseResult;
+import com.example.jpa.mail.entity.MailTemplate;
+import com.example.jpa.mail.repository.MailTemplateRepository;
 import com.example.jpa.user.entity.User;
 import com.example.jpa.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +54,8 @@ public class BoardServiceImpl implements BoardService {
     private final BoardCommentRepository boardCommentRepository;
 
     private final UserRepository userRepository;
+    private final MailTemplateRepository mailTemplateRepository;
+    private final MailComponent mailComponent;
 
     @Override
     public ServiceResult addBoard(BoardTypeInput boardTypeInput) {
@@ -441,6 +448,33 @@ public class BoardServiceImpl implements BoardService {
                 .regDate(LocalDateTime.now())
                 .build();
         boardRepository.save(board);
+
+        return ServiceResult.success();
+    }
+
+    @Override
+    public ServiceResult replyBoard(Long id, BoardReplyInput boardReplyInput) {
+        Optional<Board> optionalBoard = boardRepository.findById(id);
+        if (!optionalBoard.isPresent()) {
+            return ServiceResult.fail("게시글이 존재하지 않습니다.");
+        }
+        Board board = optionalBoard.get();
+        board.setReplyContents(boardReplyInput.getReplyContents());
+        boardRepository.save(board);
+
+        // 메일 전송
+        Optional<MailTemplate> optionalMailTemplate = mailTemplateRepository.findByTemplateId("BOARD_REPLY");
+        optionalMailTemplate.ifPresent((e) -> {
+            String fromEmail = e.getSendEmail();
+            String fromUserName = e.getSendUserName();
+            String title = e.getTitle().replaceAll("\\{USER_NAME\\}", board.getUser().getUserName());
+            String contents = e.getContents().replaceAll("\\{BOARD_TITLE\\}", board.getTitle())
+                    .replaceAll("\\{BOARD_CONTENTS\\}", board.getContents())
+                    .replaceAll("\\{BOARD_REPLY_CONTENTS\\}", board.getReplyContents());
+
+            mailComponent.send(fromEmail, fromUserName,
+                    board.getUser().getEmail(), board.getUser().getUserName(), title, contents);
+        });
 
         return ServiceResult.success();
     }

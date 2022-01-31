@@ -52,4 +52,7 @@ public class Board {
 
     @Column
     private LocalDate publishEndDate;
+
+    @Column
+    private String replyContents;
 }

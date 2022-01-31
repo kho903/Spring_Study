@@ -1,6 +1,6 @@
 
 INSERT INTO USER (ID, EMAIL, PASSWORD, PHONE, REG_DATE, UPDATE_DATE, USER_NAME, STATUS, LOCK_YN, PASSWORD_RESET_YN)
-VALUES (1, 'test@naver.com', '1111', '010-1111-2222', '2022-01-01 00:00:00.000000', null, '박규태', 'Using', 0, 0),
+VALUES (1, 'gmldnr2222@naver.com', '1111', '010-1111-2222', '2022-01-01 00:00:00.000000', null, '박규태', 'Using', 0, 0),
     (2, 'test1@naver.com', '2222', '010-3333-4444', '2022-01-11 00:10:00.000000', null, '정혜경', 'Using', 0, 0),
     (3, 'test2@naver.com', '3333', '010-5555-6666', '2022-01-11 20:00:01.000000', null, '박하은', 'Using', 0, 0),
     (4, 'test3@naver.com', '4444', '010-7777-8888', '2022-01-01 00:30:10.000000', null, '박하영', 'Stop', 0, 0);
@@ -27,11 +27,13 @@ VALUES (1, 3, 1)
 
 INSERT INTO BOARD_TYPE (ID, BOARD_NAME, REG_DATE, USING_YN)
 VALUES (1, '게시판1', '2022-01-01 00:00:00.000000', 1),
-       (2, '게시판2', '2022-01-01 00:00:00.000000', 1);
+       (2, '게시판2', '2022-01-01 00:00:00.000000', 1),
+       (3, '문의 게시판', '2022-01-01 00:00:00.000000', 1);
 
 INSERT INTO BOARD (ID, BOARD_TYPE_ID, USER_ID, TITLE, CONTENTS, REG_DATE, TOP_YN)
 VALUES (1, 1, 1, '게시글1', '게시글내용1', '2022-01-02 00:00:00.000000', 0),
-       (2, 1, 1, '게시글2', '게시글내용2', '2022-01-02 00:00:00.000000', 0);
+       (2, 1, 1, '게시글2', '게시글내용2', '2022-01-02 00:00:00.000000', 0),
+       (3, 3, 1, '문의 제목1', '문의 내용1', '2022-01-02 00:00:00.000000', 0);
 
 INSERT INTO BOARD_COMMENT(ID, COMMENTS, REG_DATE, BOARD_ID, USER_ID)
 VALUES
@@ -43,4 +45,7 @@ INSERT INTO MAIL_TEMPLATE(ID, TEMPLATE_ID, TITLE, CONTENTS, SEND_EMAIL, SEND_USE
 VALUES
     (1, 'USER_RESET_PASSWORD', '{USER_NAME}님의 비밀번호 초기화 요청입니다.',
      '<div><p>{USER_NAME} 안녕하세요.</p><p>아래 링크를 클릭하여 비밀번호를 초기화해 주세요.</p><p><a href="{SERVER_URL}/reset?key={RESET_PASSWORD_KEY}">초기화</a></p></div>',
-     'test@naver.com', '관리자', '2022-01-01 00:00:00.000000')
+     'test@naver.com', '관리자', '2022-01-01 00:00:00.000000'),
+    (2., 'BOARD_REPLY', '{USER_NAME} 님이 글에 답변을 하였습니다.',
+     '<div><p>제목 : {BOARD_TITLE}</p><p>내용</p><div>{BOARD_CONTENTS}</div><p>답변</p><div>{BOARD_REPLY_CONTENTS}</div>',
+     'test@naver.com', '관리자', '2022-01-01 00:00:00.000000');
