@@ -35,6 +35,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.qlrm/qlrm
 	implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.1'
 
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.4.13'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

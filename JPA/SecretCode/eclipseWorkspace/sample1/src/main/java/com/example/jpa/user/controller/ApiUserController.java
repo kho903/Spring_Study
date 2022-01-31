@@ -29,6 +29,7 @@ import com.example.jpa.user.model.UserResponse;
 import com.example.jpa.user.model.UserUpdate;
 import com.example.jpa.user.repository.UserRepository;
 import com.example.jpa.user.service.PointService;
+import com.example.jpa.user.service.UserService;
 import com.example.jpa.util.JWTUtils;
 import com.example.jpa.util.PasswordUtils;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,8 @@ public class ApiUserController {
 
     private final BoardService boardService;
     private final PointService pointService;
+
+    private final UserService userService;
 
     @PostMapping("/api/user")
     public ResponseEntity<?> addUser(@RequestBody @Valid UserInput userInput, Errors errors) {
@@ -484,6 +487,12 @@ public class ApiUserController {
             return ResponseResult.fail("토큰 정보가 정확하지 않습니다.");
         }
         ServiceResult result = pointService.addPoint(email, userPointInput);
+        return ResponseResult.result(result);
+    }
+
+    @PostMapping("/api/public/user")
+    public ResponseEntity<?> addUser(@RequestBody UserInput userInput) {
+        ServiceResult result = userService.addUser(userInput);
         return ResponseResult.result(result);
     }
 }
