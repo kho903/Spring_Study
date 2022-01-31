@@ -1,9 +1,9 @@
 
-INSERT INTO USER (ID, EMAIL, PASSWORD, PHONE, REG_DATE, UPDATE_DATE, USER_NAME, STATUS, LOCK_YN)
-VALUES (1, 'test@naver.com', '1111', '010-1111-2222', '2022-01-01 00:00:00.000000', null, '박규태', 'Using', 0),
-    (2, 'test1@naver.com', '2222', '010-3333-4444', '2022-01-11 00:10:00.000000', null, '정혜경', 'Using', 0),
-    (3, 'test2@naver.com', '3333', '010-5555-6666', '2022-01-11 20:00:01.000000', null, '박하은', 'Using', 0),
-    (4, 'test3@naver.com', '4444', '010-7777-8888', '2022-01-01 00:30:10.000000', null, '박하영', 'Stop', 0);
+INSERT INTO USER (ID, EMAIL, PASSWORD, PHONE, REG_DATE, UPDATE_DATE, USER_NAME, STATUS, LOCK_YN, PASSWORD_RESET_YN)
+VALUES (1, 'test@naver.com', '1111', '010-1111-2222', '2022-01-01 00:00:00.000000', null, '박규태', 'Using', 0, 0),
+    (2, 'test1@naver.com', '2222', '010-3333-4444', '2022-01-11 00:10:00.000000', null, '정혜경', 'Using', 0, 0),
+    (3, 'test2@naver.com', '3333', '010-5555-6666', '2022-01-11 20:00:01.000000', null, '박하은', 'Using', 0, 0),
+    (4, 'test3@naver.com', '4444', '010-7777-8888', '2022-01-01 00:30:10.000000', null, '박하영', 'Stop', 0, 0);
 
 INSERT INTO NOTICE (ID, CONTENTS, HITS, LIKES, REG_DATE, TITLE, DELETED, USER_ID) VALUES (1, '내용1', 0, 0, '2022-01-01 00:00:00.000000', '제목1', 0, 1);
 INSERT INTO NOTICE (ID, CONTENTS, HITS, LIKES, REG_DATE, TITLE, DELETED, USER_ID) VALUES (2, '내용2', 0, 0, '2022-01-01 00:01:00.000000', '제목2', 0, 1);
@@ -38,3 +38,9 @@ VALUES
     (1, '게시글 1번에 대한 댓글1', '2022-01-10 01:00:00.000000', 1, 4),
     (2, '게시글 1번에 대한 댓글2', '2022-01-10 01:00:00.000000', 1, 4),
     (3, '게시글 2번에 대한 댓글1', '2022-01-10 02:00:00.000000', 2, 4);
+
+INSERT INTO MAIL_TEMPLATE(ID, TEMPLATE_ID, TITLE, CONTENTS, SEND_EMAIL, SEND_USER_NAME, REG_DATE)
+VALUES
+    (1, 'USER_RESET_PASSWORD', '{USER_NAME}님의 비밀번호 초기화 요청입니다.',
+     '<div><p>{USER_NAME} 안녕하세요.</p><p>아래 링크를 클릭하여 비밀번호를 초기화해 주세요.</p><p><a href="{SERVER_URL}/reset?key={RESET_PASSWORD_KEY}">초기화</a></p></div>',
+     'test@naver.com', '관리자', '2022-01-01 00:00:00.000000')

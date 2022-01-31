@@ -5,6 +5,7 @@ import com.example.jpa.user.entity.User;
 import com.example.jpa.user.model.UserInput;
 import com.example.jpa.user.model.UserLogin;
 import com.example.jpa.user.model.UserNoticeCount;
+import com.example.jpa.user.model.UserPasswordResetInput;
 import com.example.jpa.user.model.UserSummary;
 
 import java.util.List;
@@ -32,4 +33,7 @@ public interface UserService {
 
     // 회원 가입
     ServiceResult addUser(UserInput userInput);
+
+    // 비밀번호 초기화 진행
+    ServiceResult resetPassword(UserPasswordResetInput userPasswordResetInput);
 }

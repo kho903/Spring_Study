@@ -3,12 +3,14 @@ package com.example.jpa.user.service;
 import com.example.jpa.board.model.ServiceResult;
 import com.example.jpa.common.MailComponent;
 import com.example.jpa.common.exception.BizException;
-import com.example.jpa.logs.service.LogService;
+import com.example.jpa.mail.entity.MailTemplate;
+import com.example.jpa.mail.repository.MailTemplateRepository;
 import com.example.jpa.user.entity.User;
 import com.example.jpa.user.entity.UserInterest;
 import com.example.jpa.user.model.UserInput;
 import com.example.jpa.user.model.UserLogin;
 import com.example.jpa.user.model.UserNoticeCount;
+import com.example.jpa.user.model.UserPasswordResetInput;
 import com.example.jpa.user.model.UserStatus;
 import com.example.jpa.user.model.UserSummary;
 import com.example.jpa.user.repository.UserCustomRepository;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final UserCustomRepository userCustomRepository;
     private final UserInterestRepository userInterestRepository;
     private final MailComponent mailComponent;
+    private final MailTemplateRepository mailTemplateRepository;
 
     @Override
     public UserSummary getUserStatusCount() {
@@ -170,6 +174,38 @@ public class UserServiceImpl implements UserService {
         String contents = "회원가입을 축하드립니다.";
 
         mailComponent.send(fromEmail, fromName, toEmail, toName, title, contents);
+
+        return ServiceResult.success();
+    }
+
+    @Override
+    public ServiceResult resetPassword(UserPasswordResetInput userPasswordResetInput) {
+        Optional<User> optionalUser = userRepository.findByEmailAndUserName(userPasswordResetInput.getEmail(), userPasswordResetInput.getUserName());
+        if (!optionalUser.isPresent()) {
+            throw new BizException("회원 정보가 존재하지 않습니다.");
+        }
+
+        User user = optionalUser.get();
+        String passwordResetKey = UUID.randomUUID().toString();
+
+        user.setPasswordResetYn(true);
+        user.setPasswordResetKey(passwordResetKey);
+        userRepository.save(user);
+
+        String serverURL = "http://localhost:8080";
+
+        Optional<MailTemplate> optionalMailTemplate = mailTemplateRepository.findByTemplateId("USER_RESET_PASSWORD");
+        optionalMailTemplate.ifPresent(e -> {
+
+            String fromEmail = e.getSendEmail();
+            String fromUserName = e.getSendUserName();
+            String title = e.getTitle().replaceAll("\\{USER_NAME\\}", user.getUserName());
+            String contents = e.getContents().replaceAll("\\{USER_NAME\\}", user.getUserName())
+                    .replaceAll("\\{SERVER_URL\\}", serverURL)
+                    .replaceAll("\\{RESET_PASSWORD_KEY\\}", passwordResetKey);
+
+            mailComponent.send(fromEmail, fromUserName, user.getEmail(), user.getUserName(), title, contents);
+        });
 
         return ServiceResult.success();
     }

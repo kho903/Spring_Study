@@ -13,7 +13,11 @@ create table USER
     UPDATE_DATE TIMESTAMP,
     STATUS      VARCHAR(255),
 
-    LOCK_YN     BOOLEAN
+    LOCK_YN     BOOLEAN,
+
+    PASSWORD_RESET_YN   BOOLEAN,
+    PASSWORD_RESET_KEY  VARCHAR(255)
+
 );
 
 -- auto-generated definition
@@ -204,6 +208,20 @@ create table LOGS
     ID          BIGINT auto_increment primary key,
     TEXT        CLOB,
     REG_DATE    TIMESTAMP
+);
+
+-- auto-generated definition
+create table MAIL_TEMPLATE
+(
+    ID             BIGINT auto_increment primary key,
+    TEMPLATE_ID    VARCHAR(255),
+    TITLE          VARCHAR(255),
+    CONTENTS       VARCHAR(255),
+
+    SEND_EMAIL     VARCHAR(255),
+    SEND_USER_NAME VARCHAR(255),
+
+    REG_DATE       TIMESTAMP
 );
 
 
