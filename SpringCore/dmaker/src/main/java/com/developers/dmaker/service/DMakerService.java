@@ -2,10 +2,15 @@ package com.developers.dmaker.service;
 
 import static com.developers.dmaker.exception.DMakerErrorCode.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.developers.dmaker.dto.CreateDeveloper;
+import com.developers.dmaker.dto.DeveloperDetailDto;
+import com.developers.dmaker.dto.DeveloperDto;
 import com.developers.dmaker.entity.Developer;
 import com.developers.dmaker.exception.DMakerException;
 import com.developers.dmaker.repository.DeveloperRepository;
@@ -43,7 +48,7 @@ public class DMakerService {
 			throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
 		}
 		if (developerLevel == DeveloperLevel.JUNGNIOR
-			&& experienceYears < 4 || experienceYears > 10) {
+			&& (experienceYears < 4 || experienceYears > 10)) {
 			throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
 		}
 		if (developerLevel == DeveloperLevel.JUNIOR
@@ -57,5 +62,18 @@ public class DMakerService {
 			.ifPresent((developer -> {
 				throw new DMakerException(DUPLICATED_MEMBER_ID);
 			}));
+	}
+
+	public List<DeveloperDto> getAllDevelopers() {
+		return developerRepository.findAll()
+			.stream()
+			.map(DeveloperDto::fromEntity)
+			.collect(Collectors.toList());
+	}
+
+	public DeveloperDetailDto getDeveloperDetail(String memberId) {
+		return developerRepository.findByMemberId(memberId)
+			.map(DeveloperDetailDto::fromEntity)
+			.orElseThrow(() -> new DMakerException(NO_DEVELOPER));
 	}
 }
