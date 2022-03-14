@@ -1,7 +1,6 @@
 package com.developers.dmaker.controller;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -32,13 +31,12 @@ public class DMakerController {
 	}
 
 	@PostMapping("/create-developers")
-	public List<String> createDevelopers(
+	public CreateDeveloper.Response createDevelopers(
 		@Valid @RequestBody CreateDeveloper.Request request
 	) {
 		log.info("request : {}", request);
-		dMakerService.createDeveloper(request);
 
-		return Collections.singletonList("Olaf");
+		return dMakerService.createDeveloper(request);
 	}
 
 }
