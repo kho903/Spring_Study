@@ -3,6 +3,7 @@ package com.developers.dmaker.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.developers.dmaker.dto.CreateDeveloper;
 import com.developers.dmaker.entity.Developer;
 import com.developers.dmaker.repository.DeveloperRepository;
 import com.developers.dmaker.type.DeveloperLevel;
@@ -16,7 +17,7 @@ public class DMakerService {
 	private final DeveloperRepository developerRepository;
 
 	@Transactional
-	public void createDeveloper() {
+	public void createDeveloper(CreateDeveloper.Request request) {
 		Developer developer = Developer.builder()
 			.developerLevel(DeveloperLevel.JUNIOR)
 			.developerSkillType(DeveloperSkillType.FRONT_END)
