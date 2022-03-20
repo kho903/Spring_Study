@@ -1,6 +1,8 @@
 package com.developers.dmaker.service;
 
+import static com.developers.dmaker.constant.DMakerConstant.*;
 import static com.developers.dmaker.exception.DMakerErrorCode.*;
+import static com.developers.dmaker.type.DeveloperLevel.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -106,16 +108,16 @@ public class DMakerService {
 	private void validateDeveloperLevel(
 		DeveloperLevel developerLevel, Integer experienceYears
 	) {
-		if (developerLevel == DeveloperLevel.SENIOR
-			&& experienceYears < 10) {
+		if (developerLevel == SENIOR
+			&& experienceYears < MIN_SENIOR_EXPERIENCE_YEARS) {
 			throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
 		}
 		if (developerLevel == DeveloperLevel.JUNGNIOR
-			&& (experienceYears < 4 || experienceYears > 10)) {
+			&& (experienceYears < MAX_JUNIOR_EXPERIENCE_YEARS || experienceYears > MIN_SENIOR_EXPERIENCE_YEARS)) {
 			throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
 		}
 		if (developerLevel == DeveloperLevel.JUNIOR
-			&& experienceYears > 4) {
+			&& experienceYears > MAX_JUNIOR_EXPERIENCE_YEARS) {
 			throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
 		}
 	}
