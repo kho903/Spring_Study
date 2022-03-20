@@ -5,6 +5,7 @@ import static com.developers.dmaker.exception.DMakerErrorCode.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DMakerService {
+	// SpEL을 위한 예
+	@Value("${developer.level.min.senior}")
+	private final Integer minSeniorYears;
+
 	private final DeveloperRepository developerRepository;
 	private final RetiredDeveloperRepository retiredDeveloperRepository;
 
@@ -106,7 +111,7 @@ public class DMakerService {
 		return developer;
 	}
 
-	@Transactional
+	@Transactional // aop의 어라운드 방식으로 조인포인트에 조인해서 특정 aspect를 돌려주는 방식
 	public DeveloperDetailDto deleteDeveloper(String memberId) {
 		// 1. EMPLOYED -> RETIRED
 		Developer developer = developerRepository.findByMemberId(memberId)
