@@ -69,6 +69,8 @@ class DMakerServiceTest {
 		// given
 		given(developerRepository.findByMemberId(anyString()))
 			.willReturn(Optional.empty());
+		given(developerRepository.save(any()))
+			.willReturn(defaultDeveloper);
 
 		ArgumentCaptor<Developer> captor =
 			ArgumentCaptor.forClass(Developer.class);
