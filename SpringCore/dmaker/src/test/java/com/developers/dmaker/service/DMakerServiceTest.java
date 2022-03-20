@@ -1,29 +1,26 @@
 package com.developers.dmaker.service;
 
+import static com.developers.dmaker.exception.DMakerErrorCode.*;
 import static com.developers.dmaker.type.DeveloperLevel.*;
 import static com.developers.dmaker.type.DeveloperSkillType.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.developers.dmaker.dto.CreateDeveloper;
 import com.developers.dmaker.dto.DeveloperDetailDto;
-import com.developers.dmaker.dto.DeveloperDto;
 import com.developers.dmaker.entity.Developer;
+import com.developers.dmaker.exception.DMakerException;
 import com.developers.dmaker.repository.DeveloperRepository;
 import com.developers.dmaker.repository.RetiredDeveloperRepository;
-import com.developers.dmaker.type.DeveloperLevel;
-import com.developers.dmaker.type.DeveloperSkillType;
 
 // @SpringBootTest // spring을 직접 띄워 테스트, 통합 테스트
 @ExtendWith(MockitoExtension.class)
@@ -37,41 +34,73 @@ class DMakerServiceTest {
 	@InjectMocks
 	private DMakerService dMakerService;
 
-	@Test
-	public void testSomething() {
+	private final Developer defaultDeveloper = Developer.builder()
+		.developerLevel(SENIOR)
+		.developerSkillType(FRONT_END)
+		.experienceYears(12)
+		.memberId("memberId")
+		.name("name")
+		.age(32)
+		.build();
 
-		dMakerService.createDeveloper(CreateDeveloper.Request.builder()
-			.developerLevel(SENIOR)
-			.developerSkillType(FRONT_END)
-			.experienceYears(12)
-			.memberId("memberId")
-			.name("name")
-			.age(32)
-			.build()
-		);
-
-		List<DeveloperDto> allEmployedDevelopers = dMakerService.getAllEmployedDevelopers();
-		System.out.println("====================================");
-		System.out.println(allEmployedDevelopers);
-		System.out.println("====================================");
-	}
+	private final CreateDeveloper.Request defaultCreateRequest = CreateDeveloper.Request.builder()
+		.developerLevel(SENIOR)
+		.developerSkillType(FRONT_END)
+		.experienceYears(12)
+		.memberId("memberId")
+		.name("name")
+		.age(32)
+		.build();
 
 	@Test
 	public void tdd() {
+		// given
 		// mocking
 		given(developerRepository.findByMemberId(anyString()))
-			.willReturn(Optional.of(Developer.builder()
-				.developerLevel(SENIOR)
-				.developerSkillType(FRONT_END)
-				.experienceYears(12)
-				.memberId("memberId")
-				.name("name")
-				.age(32)
-				.build()));
+			.willReturn(Optional.of(defaultDeveloper));
+
+		// when
 		DeveloperDetailDto developerDetail = dMakerService.getDeveloperDetail("memberId");
 
+		// then
 		assertEquals(SENIOR, developerDetail.getDeveloperLevel());
 		assertEquals(FRONT_END, developerDetail.getDeveloperSkillType());
 		assertEquals(12, developerDetail.getExperienceYears());
+	}
+
+	@Test
+	public void createDeveloperTest_success() throws Exception {
+		// given
+		given(developerRepository.findByMemberId(anyString()))
+			.willReturn(Optional.empty());
+
+		ArgumentCaptor<Developer> captor =
+			ArgumentCaptor.forClass(Developer.class);
+
+		// when
+		CreateDeveloper.Response developer = dMakerService.createDeveloper(defaultCreateRequest);
+
+		// then
+		verify(developerRepository, times(1))
+			.save(captor.capture());
+
+		Developer savedDeveloper = captor.getValue();
+		assertEquals(SENIOR, savedDeveloper.getDeveloperLevel());
+		assertEquals(FRONT_END, savedDeveloper.getDeveloperSkillType());
+		assertEquals(12, savedDeveloper.getExperienceYears());
+	}
+
+	@Test
+	public void createDeveloperTest_failed_with_duplicated() throws Exception {
+		// given
+		given(developerRepository.findByMemberId(anyString()))
+			.willReturn(Optional.of(defaultDeveloper));
+
+		// when
+		// then
+		DMakerException dMakerException = assertThrows(DMakerException.class,
+			() -> dMakerService.createDeveloper(defaultCreateRequest));
+
+		assertEquals(DUPLICATED_MEMBER_ID, dMakerException.getDMakerErrorCode());
 	}
 }
