@@ -20,16 +20,12 @@ import com.developers.dmaker.dto.DeveloperDetailDto;
 import com.developers.dmaker.entity.Developer;
 import com.developers.dmaker.exception.DMakerException;
 import com.developers.dmaker.repository.DeveloperRepository;
-import com.developers.dmaker.repository.RetiredDeveloperRepository;
 
 // @SpringBootTest // spring을 직접 띄워 테스트, 통합 테스트
 @ExtendWith(MockitoExtension.class)
 class DMakerServiceTest {
 	@Mock
 	private DeveloperRepository developerRepository;
-
-	@Mock
-	private RetiredDeveloperRepository retiredDeveloperRepository;
 
 	@InjectMocks
 	private DMakerService dMakerService;
@@ -69,7 +65,7 @@ class DMakerServiceTest {
 	}
 
 	@Test
-	public void createDeveloperTest_success() throws Exception {
+	public void createDeveloperTest_success() {
 		// given
 		given(developerRepository.findByMemberId(anyString()))
 			.willReturn(Optional.empty());
@@ -78,7 +74,7 @@ class DMakerServiceTest {
 			ArgumentCaptor.forClass(Developer.class);
 
 		// when
-		CreateDeveloper.Response developer = dMakerService.createDeveloper(defaultCreateRequest);
+		dMakerService.createDeveloper(defaultCreateRequest);
 
 		// then
 		verify(developerRepository, times(1))
@@ -91,7 +87,7 @@ class DMakerServiceTest {
 	}
 
 	@Test
-	public void createDeveloperTest_failed_with_duplicated() throws Exception {
+	public void createDeveloperTest_failed_with_duplicated() {
 		// given
 		given(developerRepository.findByMemberId(anyString()))
 			.willReturn(Optional.of(defaultDeveloper));
