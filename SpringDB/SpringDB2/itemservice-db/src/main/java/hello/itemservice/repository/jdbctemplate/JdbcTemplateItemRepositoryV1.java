@@ -38,7 +38,7 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		template.update(connection -> {
 			// 자동 증가 키
-			PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id}"});
+			PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
 			ps.setString(1, item.getItemName());
 			ps.setInt(2, item.getPrice());
 			ps.setInt(3, item.getQuantity());
